@@ -15,12 +15,12 @@ Users will be able to buy and sell overflow home-grown produce.
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
-- **Category:** 
-- **Mobile:**
-- **Story:**
-- **Market:**
-- **Habit:**
-- **Scope:**
+- **Category:** Marketplace App
+- **Mobile:** Users can use the camera on their phone to take pictures of produce and can use the location services feature to see how close sellers are to them.
+- **Story:** Often times, produce is produced in overflow for one individual family to consume (e.g.: an orange tree produces between 100 to 300 oranges a year) - to prevent food waste and to make some extra money, users can sell their overflow produce.
+- **Market:** The app would be more useful for users in warmer climates (e.g.: California or Florida) where produce is often grown in overflow. Anyone in these climates could use the app.
+- **Habit:** Users would be able to buy and sell produce on the app. They would likely use it every week when they purchase groceries. 
+- **Scope:** The basic MVP of this app could be completed during the next 5 weeks. Additional features can be implemented as time permits.
 
 ## Product Spec
 
@@ -100,6 +100,7 @@ Users will be able to buy and sell overflow home-grown produce.
 ### [BONUS] Interactive Prototype
 
 ## Schema 
+# Post
 | Property        | Type                    | Description                                  | Required? |
 | -------------   | ----------------------- | -------------------------------------------- | --------  |
 | objectId        | String                  | Unique ID for the listing (default field)    | Yes       |
@@ -110,6 +111,16 @@ Users will be able to buy and sell overflow home-grown produce.
 | location        |                         | Location of listing                          | Yes       |
 | typeOfProduce   | String                  | Type of produce                              | Yes       |
 | sellBy          | DateTime                | Date when the produce should be sold         | Yes       |
+
+# User
+| Property        | Type                    | Description                                  | Required? |
+| -------------   | ----------------------- | -------------------------------------------- | --------  |
+| objectId        | String                  | Unique ID for the user (default field)       | Yes       |
+| username        | String                  | Username for the user                        | Yes       |
+| password        | String                  | Password for the user                        | Yes       |
+| email           | String                  | Email for the user                           | Yes       |
+| profilePic      | File                    | Profile pic for the user                     | No        |
+| location        |                         | Location of the user                         | No        |
 
 ### Models
 [Add table of models]
