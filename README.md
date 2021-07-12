@@ -100,7 +100,17 @@ Users will be able to buy and sell overflow home-grown produce.
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
+| Property        | Type                    | Description                                  | Required? |
+| -------------   | ----------------------- | -------------------------------------------- | --------  |
+| objectId        | String                  | Unique ID for the listing (default field)    | Yes       |
+| createdAt       | DateTime                | Date when listing is created (default field) | Yes       |
+| author          | Pointer to User         | Author of the listing                        | Yes       |
+| image           | File                    | Image of the listing                         | No        |
+| description     | String                  | Description of the listing                   | Yes       |
+| location        |                         | Location of listing                          | Yes       |
+| typeOfProduce   | String                  | Type of produce                              | Yes       |
+| sellBy          | DateTime                | Date when the produce should be sold         | Yes       |
+
 ### Models
 [Add table of models]
 ### Networking
