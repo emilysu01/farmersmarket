@@ -11,20 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.parse.ParseUser;
+import com.example.farmersmarket.models.Listing;
+import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
 public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHolder> {
-
-    public static final String KEY_USER_ID = "userId";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_USERNAME = "username";
-    public static final String KEY_PASSWORD = "password";
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_PROFILE_PIC = "profilePic";
-    public static final String KEY_LOCATION = "location";
-    public static final String KEY_LISTINGS = "listings";
 
     private Context context;
     private List<Listing> listings;
@@ -37,12 +29,14 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate view and attach it to a ViewHolder
         View view = LayoutInflater.from(context).inflate(R.layout.item_listing, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ListingsAdapter.ViewHolder holder, int position) {
+        // Find listing and bind it to the view
         Listing listing = listings.get(position);
         holder.bind(listing);
     }
@@ -54,6 +48,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        // UI components
         private ImageView ivProfilePic;
         private TextView tvUsername;
         private TextView tvName;
@@ -63,24 +58,25 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Retrieve UI components
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-
         }
 
         public void bind(Listing listing) {
+            // Display UI components
             Glide.with(context)
-                    .load(listing.getKeyAuthor().getParseFile(KEY_PROFILE_PIC).getUrl())
+                    .load(listing.getAuthor().getParseFile(User.KEY_PROFILE_PIC).getUrl())
                     .circleCrop()
                     .into(ivProfilePic);
-            tvUsername.setText(listing.getKeyAuthor().getUsername());
-            tvName.setText(listing.getKeyAuthor().getString(KEY_NAME));
-            tvDescription.setText(listing.getKeyDescription());
+            tvUsername.setText(listing.getAuthor().getUsername());
+            tvName.setText(listing.getAuthor().getString(User.KEY_NAME));
+            tvDescription.setText(listing.getDescription());
             Glide.with(context)
-                    .load(listing.getKeyImage().getUrl())
+                    .load(listing.getImage().getUrl())
                     .into(ivListingPic);
         }
     }

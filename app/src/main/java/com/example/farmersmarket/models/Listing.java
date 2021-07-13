@@ -1,4 +1,4 @@
-package com.example.farmersmarket;
+package com.example.farmersmarket.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -7,7 +7,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
-import java.util.List;
 
 @ParseClassName("Listing")
 public class Listing extends ParseObject {
@@ -31,27 +30,27 @@ public class Listing extends ParseObject {
         return String.valueOf(getCreatedAt());
     }
 
-    public ParseUser getKeyAuthor() {
+    public ParseUser getAuthor() {
         return getParseUser(KEY_AUTHOR);
     }
 
-    public ParseFile getKeyImage() {
+    public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
     }
 
-    public String getKeyDescription() {
+    public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
 
-    public ParseGeoPoint getKeyLocation() {
+    public ParseGeoPoint getLocation() {
         return getParseGeoPoint(KEY_LOCATION);
     }
 
-    public String getKeyType() {
+    public String getType() {
         return getString(KEY_TYPE);
     }
 
-    public Date getKeySellBy() {
+    public Date getSellBy() {
         return getDate(KEY_SELL_BY);
     }
 

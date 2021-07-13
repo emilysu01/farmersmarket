@@ -1,27 +1,23 @@
 package com.example.farmersmarket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.farmersmarket.fragments.HomeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
-    RecyclerView rvListings;
+    final FragmentManager fragmentManager = getSupportFragmentManager();
 
-    List<Listing> allListings = new ArrayList<>();
-    ListingsAdapter adapter;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,43 +25,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Retrieve UI components
-        rvListings = findViewById(R.id.rvListings);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        adapter = new ListingsAdapter(this, allListings);
-        rvListings.setAdapter(adapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvListings.setLayoutManager(linearLayoutManager);
-
-        queryListings();
-
-    }
-
-    private void queryListings() {
-        // Specify that we want to query Listing.class data
-        ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-        // Include data referred by user key
-        query.include(Listing.KEY_AUTHOR);
-        // Order posts by newest first
-        query.addDescendingOrder("createdAt");
-        // Start an asynchronous call for listings
-        query.findInBackground(new FindCallback<Listing>() {
+        // Set bottom navigation view functionality
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void done(List<Listing> listings, ParseException e) {
-                // Check for errors
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch(item.getItemId()) {
+                    case R.id.action_home:
+                        fragment = new HomeFragment();
+                        break;
+                    case R.id.action_search:
+                        // TODO: Update with search fragment
+                        fragment = new HomeFragment();
+                        break;
+                    case R.id.action_list:
+                        // TODO: Update with list fragment
+                        fragment = new HomeFragment();
+                        break;
+                    case R.id.action_profile:
+                    default:
+                        // TODO: Update with profile fragment
+                        fragment = new HomeFragment();
+                        break;
                 }
-
-                // for debugging purposes let's print every post description to logcat
-                // for (Listing listing : listings) {
-                //    Log.i(TAG, "Listing author: " + listing.getKeyAuthor().getUsername() + " Listing description: " + listing.getKeyDescription());
-                // }
-
-                // Save received listings to data structure and notify adapter of new data
-                allListings.addAll(listings);
-                adapter.notifyDataSetChanged();
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                return true;
             }
         });
+
+        // Set defaut selection
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 }

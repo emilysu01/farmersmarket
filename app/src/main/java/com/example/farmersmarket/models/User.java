@@ -1,13 +1,14 @@
-package com.example.farmersmarket;
+package com.example.farmersmarket.models;
 
+import com.parse.Parse;
+import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class User extends ParseObject {
+@ParseClassName("_User")
+public class User extends ParseUser {
 
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_NAME = "name";
