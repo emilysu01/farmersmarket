@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.farmersmarket.fragments.HomeFragment;
+import com.example.farmersmarket.fragments.ListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                     case R.id.action_list:
-                        // TODO: Update with list fragment
-                        fragment = new HomeFragment();
+                        fragment = new ListFragment();
                         break;
                     case R.id.action_profile:
                     default:

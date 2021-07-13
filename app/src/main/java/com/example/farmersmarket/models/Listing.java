@@ -54,4 +54,16 @@ public class Listing extends ParseObject {
         return getDate(KEY_SELL_BY);
     }
 
+
+    public void setAuthor(ParseUser author) {
+        put(KEY_AUTHOR, author);
+    }
+
+    public void setDescription(String description) {
+        put(KEY_DESCRIPTION, description);
+    }
+
+    public void setImage(ParseFile image) {
+        put(KEY_IMAGE, image);
+    }
 }
