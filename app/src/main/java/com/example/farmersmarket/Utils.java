@@ -6,8 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
+import com.parse.ParseFile;
+
+import java.io.File;
 import java.io.IOException;
 
 public class Utils {
@@ -40,5 +45,14 @@ public class Utils {
             e.printStackTrace();
         }
         return image;
+    }
+
+    public static File getPhotoFileUri(Context context, String fileName, String tag) {
+        File mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), tag);
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(tag, "failed to create directory");
+        }
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+        return file;
     }
 }

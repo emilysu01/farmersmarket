@@ -60,7 +60,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
             // Retrieve UI components
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
+            tvUsername = itemView.findViewById(R.id.tvName);
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);

@@ -2,11 +2,13 @@ package com.example.farmersmarket.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -22,28 +24,36 @@ import android.widget.Toast;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URI;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ListFragment extends Fragment {
 
-    // Result code for loading image (given arbitrarily)
-    public static final int RESULT_LOAD_IMAGE = 1;
     public static final String TAG = "ListFragment";
 
+    // Result code for loading image (given arbitrarily)
+    public static final int RESULT_LOAD_IMAGE = 1;
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
+
+    // UI components
     private Button btnUpload;
     private Button btnTakePic;
     private ImageView ivListingPic;
     private EditText etDescription;
     private Button btnList;
 
-    ParseFile photoFile;
+    File photoFile;
+    String photoFileName;
 
     // Required empty public constructor
     public ListFragment() {
@@ -106,7 +116,21 @@ public class ListFragment extends Fragment {
     }
 
     private void launchCamera() {
+        // Create intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        // Create a file reference for future access
+        photoFileName = (new Date()).toString() + ".jpg";
+        photoFile = Utils.getPhotoFileUri(getContext(), photoFileName, TAG);
+
+        // Wrap File object into a content provider
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // Start the image capture intent to take photo
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
     }
 
     @Override
@@ -119,20 +143,34 @@ public class ListFragment extends Fragment {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            photoFile = new ParseFile(byteArray);
+            ParseFile tempPhotoFile = new ParseFile(byteArray);
 
             // Update UI with photo
             ivListingPic.setImageBitmap(selectedImage);
         }
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Update UI with photo
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                ivListingPic.setImageBitmap(takenImage);
+            } else {
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
-    private void saveListing(String description, ParseUser currentUser, ParseFile photoFile) {
+    private void saveListing(String description, ParseUser currentUser, File photoFile) {
         // Set up new listing
         Listing listing = new Listing();
         listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
         if (photoFile != null) {
-            listing.setImage(photoFile);
+            Uri picUri = Uri.fromFile(photoFile);
+            Bitmap selectedImage = Utils.loadFromUri(getContext(), picUri);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            listing.setImage(new ParseFile(byteArray));
         }
 
         // Save new listing to database
@@ -149,5 +187,6 @@ public class ListFragment extends Fragment {
                 ivListingPic.setImageResource(0);
             }
         });
+        // Parse.enableLocalDatastore(getContext());
     }
 }

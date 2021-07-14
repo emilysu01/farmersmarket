@@ -10,7 +10,10 @@ import android.view.MenuItem;
 
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
+import com.example.farmersmarket.fragments.ProfileFragment;
+import com.example.farmersmarket.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,16 +41,14 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                     case R.id.action_search:
-                        // TODO: Update with search fragment
-                        fragment = new HomeFragment();
+                        fragment = new SearchFragment();
                         break;
                     case R.id.action_list:
                         fragment = new ListFragment();
                         break;
                     case R.id.action_profile:
                     default:
-                        // TODO: Update with profile fragment
-                        fragment = new HomeFragment();
+                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
