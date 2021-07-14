@@ -1,4 +1,4 @@
-package com.example.farmersmarket;
+package com.example.farmersmarket.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;

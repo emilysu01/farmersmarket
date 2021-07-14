@@ -16,6 +16,7 @@ public class User extends ParseUser {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PROFILE_PIC = "profilePic";
+    public static final String KEY_ZIP = "zip";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_LISTINGS = "listings";
 
@@ -51,4 +52,24 @@ public class User extends ParseUser {
     // public List<Listing> getKeyListings() {
     //     return KEY_LISTINGS;
     // }
+
+    public void setName(String name) {
+        put(KEY_NAME, name);
+    }
+
+    public void setUsername(String username) {
+        put(KEY_USERNAME, username);
+    }
+
+    public void setEmail(String email) {
+        put(KEY_EMAIL, email);
+    }
+
+    public void setPassword(String password) {
+        put(KEY_PASSWORD, password);
+    }
+
+    public void setZip(String zip) {
+        put(KEY_ZIP, zip);
+    }
 }

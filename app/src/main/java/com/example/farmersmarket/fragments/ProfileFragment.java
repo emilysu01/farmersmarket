@@ -21,7 +21,9 @@ import com.example.farmersmarket.ShortListingsAdapter;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -75,10 +77,13 @@ public class ProfileFragment extends Fragment {
         rvShortListings.setAdapter(adapter);
         rvShortListings.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        Glide.with(getContext())
-                .load(user.getParseFile(User.KEY_PROFILE_PIC).getUrl())
-                .circleCrop()
-                .into(ivProfilePic);
+        ParseFile profilePic = user.getParseFile(User.KEY_PROFILE_PIC);
+        if (profilePic != null) {
+            Glide.with(getContext())
+                    .load(profilePic.getUrl())
+                    .circleCrop()
+                    .into(ivProfilePic);
+        }
         tvName.setText(user.getString(User.KEY_NAME));
         tvUsername.setText(user.getString(User.KEY_USERNAME));
         tvLocation.setText(user.getString(User.KEY_LOCATION));
