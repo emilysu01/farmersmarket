@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:text="First Name"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="36dp" />
@@ -195,8 +195,9 @@
         android:layout_centerInParent="false"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="false"
-        android:layout_marginStart="146dp"
+        android:layout_marginStart="157dp"
         android:layout_marginTop="20dp"
+        android:backgroundTint="@color/light_orage"
         android:text="Sign Up" />
 
     <TextView

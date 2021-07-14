@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
+    // UI components
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -36,21 +37,17 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Check which menu item was clicked and navigate to the correct screen
                 Fragment fragment;
-                switch(item.getItemId()) {
-                    case R.id.action_home:
-                        fragment = new HomeFragment();
-                        break;
-                    case R.id.action_search:
-                        fragment = new SearchFragment();
-                        break;
-                    case R.id.action_list:
-                        fragment = new ListFragment();
-                        break;
-                    case R.id.action_profile:
-                    default:
-                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
-                        break;
+                int clicked = item.getItemId();
+                if (clicked == R.id.action_home) {
+                    fragment = new HomeFragment();
+                } else if (clicked == R.id.action_search) {
+                    fragment = new SearchFragment();
+                } else if (clicked == R.id.action_list) {
+                    fragment = new ListFragment();
+                } else {
+                    fragment = new ProfileFragment(ParseUser.getCurrentUser());
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;

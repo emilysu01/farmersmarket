@@ -21,8 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FarmersMarket"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.LoginActivity"></activity>
-        <activity android:name=".activities.SignUpActivity">
+        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
