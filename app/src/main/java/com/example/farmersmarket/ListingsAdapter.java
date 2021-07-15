@@ -1,5 +1,6 @@
 package com.example.farmersmarket;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.farmersmarket.activities.MainActivity;
+import com.example.farmersmarket.fragments.DetailedListingFragment;
+import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
 
@@ -21,9 +28,12 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     private Context context;
     private List<Listing> listings;
 
+    private FragmentManager fragmentManager;
+
     public ListingsAdapter(Context context, List<Listing> listings) {
         this.context = context;
         this.listings = listings;
+        fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
     }
 
     @NonNull
@@ -78,6 +88,59 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
             Glide.with(context)
                     .load(listing.getImage().getUrl())
                     .into(ivListingPic);
+
+            // Set onClickListeners
+            ivProfilePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = listings.get(position);
+                        goToProfileScreen(listing);
+                    }
+                }
+            });
+            tvUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = listings.get(position);
+                        goToProfileScreen(listing);
+                    }
+                }
+            });
+            ivListingPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = listings.get(position);
+                        goToDetailedListingScreen(listing);
+                    }
+                }
+            });
+            tvDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = listings.get(position);
+                        goToDetailedListingScreen(listing);
+                    }
+                }
+            });
         }
     }
+
+    private void goToProfileScreen(Listing listing) {
+        Fragment fragment = new ProfileFragment(listing.getAuthor());
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
+    private void goToDetailedListingScreen(Listing listing) {
+        Fragment fragment = new DetailedListingFragment(listing);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
 }
+

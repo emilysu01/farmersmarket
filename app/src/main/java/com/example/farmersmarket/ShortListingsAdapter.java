@@ -7,9 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.farmersmarket.fragments.DetailedListingFragment;
+import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
 
@@ -20,9 +25,12 @@ public class ShortListingsAdapter extends RecyclerView.Adapter<ShortListingsAdap
     private Context context;
     private List<Listing> listings;
 
+    private FragmentManager fragmentManager;
+
     public ShortListingsAdapter(Context context, List<Listing> listings) {
         this.context = context;
         this.listings = listings;
+        fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
     }
 
     @NonNull
@@ -62,6 +70,22 @@ public class ShortListingsAdapter extends RecyclerView.Adapter<ShortListingsAdap
             Glide.with(context)
                     .load(listing.getImage().getUrl())
                     .into(ivPicture);
+            ivPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = listings.get(position);
+                        goToDetailedListingScreen(listing);
+                    }
+                }
+            });
         }
     }
+
+    private void goToDetailedListingScreen(Listing listing) {
+        Fragment fragment = new DetailedListingFragment(listing);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
 }
