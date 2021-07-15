@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,7 @@ public class DetailedListingFragment extends Fragment {
         tvDescription = view.findViewById(R.id.tvDescription);
         btnContact = view.findViewById(R.id.btnContact);
 
-        // Set onClickListeners
+        // Display UI
         ParseUser user = listing.getAuthor();
         Glide.with(getContext())
                 .load(user.getParseFile(User.KEY_PROFILE_PIC).getUrl())
@@ -69,5 +71,26 @@ public class DetailedListingFragment extends Fragment {
                 .load(listing.getImage().getUrl())
                 .into(ivListingPic);
         tvDescription.setText(listing.getDescription());
+
+        // Set onClickListeners
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToProfileScreen(listing);
+            }
+        });
+
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToProfileScreen(listing);
+            }
+        });
+    }
+
+    private void goToProfileScreen(Listing listing) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment = new ProfileFragment(listing.getAuthor());
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 }
