@@ -3,6 +3,8 @@ package com.example.farmersmarket.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -113,6 +115,7 @@ public class ListFragment extends Fragment {
     private void launchUploader() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+        photoFile = Utils.getPhotoFileUri(getContext(), photoFileName, TAG);
     }
 
     private void launchCamera() {
@@ -164,14 +167,14 @@ public class ListFragment extends Fragment {
         Listing listing = new Listing();
         listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
-        if (photoFile != null) {
-            Uri picUri = Uri.fromFile(photoFile);
-            Bitmap selectedImage = Utils.loadFromUri(getContext(), picUri);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            listing.setImage(new ParseFile(byteArray));
-        }
+
+
+        Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
+        // Bitmap selectedImage = Utils.loadFromUri(getContext(), picUri);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        listing.setImage(new ParseFile(byteArray));
 
         // Save new listing to database
         listing.saveInBackground(new SaveCallback() {
