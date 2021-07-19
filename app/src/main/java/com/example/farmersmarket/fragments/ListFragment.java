@@ -134,6 +134,7 @@ public class ListFragment extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
+
     }
 
     @Override
