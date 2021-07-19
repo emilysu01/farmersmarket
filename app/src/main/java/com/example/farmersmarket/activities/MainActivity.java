@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set defaut selection
+        // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 
@@ -72,16 +72,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Log out
         if (item.getItemId() == R.id.miLogOut) {
-            logOut();
+            ParseUser.logOut();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logOut() {
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
     }
 }

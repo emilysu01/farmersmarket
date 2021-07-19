@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -19,6 +18,13 @@ import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
 import org.w3c.dom.Text;
@@ -30,6 +36,7 @@ public class DetailedListingFragment extends Fragment {
     private ImageView ivListingPic;
     private TextView tvDescription;
     private Button btnContact;
+    private MapView mvSellerLocation;
 
     private Listing listing;
 
@@ -59,6 +66,7 @@ public class DetailedListingFragment extends Fragment {
         ivListingPic = view.findViewById(R.id.ivListingPic);
         tvDescription = view.findViewById(R.id.tvDescription);
         btnContact = view.findViewById(R.id.btnContact);
+        mvSellerLocation = view.findViewById(R.id.mvSellerLocation);
 
         // Display UI
         ParseUser user = listing.getAuthor();
@@ -71,6 +79,8 @@ public class DetailedListingFragment extends Fragment {
                 .load(listing.getImage().getUrl())
                 .into(ivListingPic);
         tvDescription.setText(listing.getDescription());
+        mvSellerLocation.onCreate(savedInstanceState);
+        mvSellerLocation.getMapAsync(callback);
 
         // Set onClickListeners
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -88,9 +98,51 @@ public class DetailedListingFragment extends Fragment {
         });
     }
 
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            // Set the map coordinates to SF
+            LatLng sf = new LatLng(37.484928, -122.148201);
+            // Add a marker on the map coordinates
+            googleMap.addMarker(new MarkerOptions().position(sf).title("Marker in SF"));
+            // Move the camera to the map coordinates and zoom in closer
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sf));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+            // Add gestures
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+        }
+    };
+
     private void goToProfileScreen(Listing listing) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         Fragment fragment = new ProfileFragment(listing.getAuthor());
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
+    @Override
+    public void onResume() {
+        mvSellerLocation.onResume();
+        super.onResume();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mvSellerLocation.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mvSellerLocation.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mvSellerLocation.onLowMemory();
     }
 }
