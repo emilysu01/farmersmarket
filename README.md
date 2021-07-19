@@ -11,16 +11,24 @@ Original App Design Project - README Template
 
 ## Overview
 ### Description
-Users will be able to buy and sell overflow home-grown produce.
+Farmer’s Market (name TBD) is an Android app where users can access a marketplace to buy and sell overflow home-grown produce. 
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
 - **Category:** Marketplace App
-- **Mobile:** Users can use the camera on their phone to take pictures of produce and can use the location services feature to see how close sellers are to them.
-- **Story:** Often times, produce is produced in overflow for one individual family to consume (e.g.: an orange tree produces between 100 to 300 oranges a year) - to prevent food waste and to make some extra money, users can sell their overflow produce.
-- **Market:** The app would be more useful for users in warmer climates (e.g.: California or Florida) where produce is often grown in overflow. Anyone in these climates could use the app.
-- **Habit:** Users would be able to buy and sell produce on the app. They would likely use it every week when they purchase groceries. 
-- **Scope:** The basic MVP of this app could be completed during the next 5 weeks. Additional features can be implemented as time permits.
+- **Mobile:** 
+  - Users can use the camera on their phone to take pictures of produce. 
+  - Users can use the location services feature on their phone to check how close buyers/sellers are to them
+- **Story:** 
+  - Sellers: Often, produce is produced in overflow for one individual family to consume (e.g.: an orange tree produces between 100 and 300 oranges a year!). To reduce food waste and to make some extra money, users can sell their overflow produce to local community members.
+  - Buyers: Users can buy fresh, home-grown produce (perhaps at a cheaper price) from local community members.
+  - Both buyers and sellers receive environmental (less food waste, less transportation emissions, etc.), economic (extra money for sellers and cheaper produce for buyers), and social (meeting new community members, etc.) benefits from the app.
+- **Market:**
+  - Anyone could use the app. The app would be useful especially for users in warmer climates where produce is often grown in overflow. 
+- **Habit:**
+  - Users would be able to buy and sell produce on the app as frequently as they’d like. Users would likely use it every week or however often they purchase groceries.
+- **Scope:**
+  - See below for required and stretch user stories. The MVP version of the app can be completed within the next 5 weeks, with additional user stories implemented as time permits.
 
 ## Product Spec
 
@@ -28,99 +36,107 @@ Users will be able to buy and sell overflow home-grown produce.
 
 **Required Must-have Stories**
 
-* Sign up
-* Log in
-* Profile page
-* Home feed
+* Sign up feature
+* Login feature
+* Home feed with relevant listings
+* Search for listings
 * Make a listing
-* Search
-* Maps feature
+* Take pictures
+  * Upload pictures
+  * Maps feature
+* Profile page with all of the user’s listings
+
 
 **Optional Nice-to-have Stories**
 
 * Messaging
-* In-app payment 
-* Following/Followers feature
+* In-app payment
+* Community events feature
+* Reviews feature
+* Following/followers feature
 * Liking feature
-* Visual effects (pull to refresh, double tap to like, etc.)
 
 ### 2. Screen Archetypes
 
 * Login screen
-   * Log in feature
-   * Link to sign up screen
+  * Login feature
 * Sign up screen
-   * Sign up feature
-   * Link to login screen
-* Home feed
+  * Sign up feature
+* Home screen
+  * Home feed with relevant listings
 * Search screen
-   * Seach feature
-* List screen
-   * Make a listing
+  * Search for listings
+* Listing screen
+  * Take pictures
+  * Upload pictures
+* Maps feature
 * Profile screen
-   * Profile screen 
+  * Profile screen with all of the user’s listings
+ 
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
-* Bottom navigation
-   * Home
-   * Search
-   * List
-   * Profile
+* Top menu bar
+  * Log out
+* Bottom navigation bar
+  * Home
+  * Search
+  * List
+  * Profile
+
 
 **Flow Navigation** (Screen to Screen)
 
 * Login screen
-   * If users don't have an account: sign up screen
-   * If users log in successfully: home screen
+  * If user doesn’t have an account: sign up screen
+  * If user logs in successfully: home screen
 * Sign up screen
-   * If users have an account: log in screen
-   * If users sign up successfully: home screen
+  * If user has an account: log in screen
+  * If user signs up successfully: home screen
 * Home screen
-   * If users click on a listing: detailed listing screen
-   * If users click on search (bottom navigation): search screen
-   * If users click on list (bottom navigation): list screen
-   * If users click on profile (bottom navigation): profile screen
+  * If user clicks on a listing: detailed listing screen
 * Search screen
-   * Search results screen
-* Search results screen 
-   * If users click on a search result: detailed listing screen
-* List screen
-   * If users post successfully: home screen
-* Profile screen
+  * Search results screen
+* Search results screen
+  * If user clicks on a listing: detailed listing screen
+* Make a listing screen
+  * If user posts successfully: home screen
+* Profile screen:
+  * If user clicks on a listing: detailed listing screen
+* Detailed listing screen:
+  * If user clicks on the listing author: profile screen
 
-## Wireframes
+## Digital Wireframes
+Figma link[https://www.figma.com/file/GrzMC0LpIaBGpRodIDji3n/Emily-Su-FBU-App-Wireframes?node-id=10%3A146]
 [Add picture of your hand sketched wireframes in this section]
 <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
 
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
-
 ## Schema 
 # Post
-| Property        | Type                    | Description                                  | Required? |
-| -------------   | ----------------------- | -------------------------------------------- | --------  |
-| objectId        | String                  | Unique ID for the listing (default field)    | Yes       |
-| createdAt       | DateTime                | Date when listing is created (default field) | Yes       |
-| author          | Pointer to User         | Author of the listing                        | Yes       |
-| image           | File                    | Image of the listing                         | No        |
-| description     | String                  | Description of the listing                   | Yes       |
-| location        |                         | Location of listing                          | Yes       |
-| typeOfProduce   | String                  | Type of produce                              | Yes       |
-| sellBy          | DateTime                | Date when the produce should be sold         | Yes       |
+| Property        | Type                    | Description                                   | Required or Optional |
+| -------------   | ----------------------- | --------------------------------------------- | -------------------  |
+| objectId        | String                  | Unique ID for the listing (default field)     | Required             |
+| createdAt       | DateTime                | Time when listing was created (default field) | Required             |
+| author          | Pointer to User         | Author of the listing                         | Required             |
+| images          | Array of Files          | Images associated with the listing            | Optional             |
+| description     | String                  | Description of the listing                    | Required             |
+| location        | ???                     | Location of listing                           | Required             |
+| typeOfProduce   | String                  | Type of produce of the listing                | Required             |
+| sellBy          | DateTime                | When the listing must be sold by              | Required             |
+
+
 
 # User
-| Property        | Type                    | Description                                  | Required? |
-| -------------   | ----------------------- | -------------------------------------------- | --------  |
-| objectId        | String                  | Unique ID for the user (default field)       | Yes       |
-| username        | String                  | Username for the user                        | Yes       |
-| password        | String                  | Password for the user                        | Yes       |
-| email           | String                  | Email for the user                           | Yes       |
-| profilePic      | File                    | Profile pic for the user                     | No        |
-| location        |                         | Location of the user                         | No        |
+| Property        | Type                    | Description                                  | Required or Optional |
+| -------------   | ----------------------- | -------------------------------------------- | -------------------  |
+| objectId        | String                  | Unique ID for the user (default field)       | Required             |
+| username        | String                  | Username for the user                        | Required             |
+| password        | String                  | Password for the user                        | Required             |
+| email           | String                  | Email for the user                           | Required             |
+| profilePic      | File                    | Profile picture for the user                 | Optional             |
+| location        | ???                     | Location of the user                         | Required             |
 
 ### Models
 [Add table of models]

@@ -41,6 +41,8 @@ public class MapsFragment extends Fragment {
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sf));
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
             googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
 
             // Display traffic
             // googleMap.setTrafficEnabled(true);
