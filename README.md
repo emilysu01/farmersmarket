@@ -110,8 +110,13 @@ Farmer’s Market (name TBD) is an Android app where users can access a marketpl
 
 ## Digital Wireframes
 Figma link[https://www.figma.com/file/GrzMC0LpIaBGpRodIDji3n/Emily-Su-FBU-App-Wireframes?node-id=10%3A146]
-[Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="Login Screen" width=600>
+<img src="Sign Up Screen" width=600>
+<img src="Home Screen" width=600>
+<img src="Search Screen" width=600>
+<img src="Listing Screen" width=600>
+<img src="Listing Details Screen" width=600>
+<img src="Profile Screen" width=600>
 
 ## Schema 
 # Post
