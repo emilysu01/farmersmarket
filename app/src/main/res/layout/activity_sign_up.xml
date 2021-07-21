@@ -67,7 +67,7 @@
         android:background="@color/light_yellow"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textWebEmailAddress"
+        android:inputType="text"
         android:paddingStart="10dp"
         android:paddingEnd="10dp" />
 

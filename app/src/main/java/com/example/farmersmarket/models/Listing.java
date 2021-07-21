@@ -1,6 +1,10 @@
 package com.example.farmersmarket.models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -38,33 +42,33 @@ public class Listing extends ParseObject {
     private Date sellBy;
     private boolean delivery;
 
-    public Listing() {
-        this.objectId = getString(KEY_OBJECT_ID);
-        this.createdAt = getDate(KEY_CREATED_AT);
-        this.author = new User(getParseUser(KEY_AUTHOR));
-        this.description = getString(KEY_DESCRIPTION);
+    /* public Listing() {
+        objectId = getString(KEY_OBJECT_ID);
+        createdAt = getDate(KEY_CREATED_AT);
+        author = new User(getParseUser(KEY_AUTHOR));
+        description = getString(KEY_DESCRIPTION);
         List<Object> rawImages = getList(KEY_IMAGES);
-        this.images = Image.rawToProcessedList(rawImages);
+        images = Image.rawToProcessedList(rawImages);
         List<Object> rawLocation = getList(KEY_LOCATION);
-        this.location = new double[]{(double) rawLocation.get(0), (double) rawLocation.get(1)};
-        this.price = getInt(KEY_PRICE);
-        this.units = getInt(KEY_UNITS);
-        this.category = getString(KEY_CATEGORY);
+        location = new double[]{(double) rawLocation.get(0), (double) rawLocation.get(1)};
+        price = getInt(KEY_PRICE);
+        units = getInt(KEY_UNITS);
+        category = getString(KEY_CATEGORY);
         List<Object> rawColors = getList(KEY_COLORS);
-        this.colors = new ArrayList<String>();
+        colors = new ArrayList<String>();
         for (Object color : rawColors) {
             this.colors.add((String) color);
         }
-        this.sellBy = getDate(KEY_SELL_BY);
-        this.delivery = getBoolean(KEY_DELIVERY);
-    }
+        sellBy = getDate(KEY_SELL_BY);
+        delivery = getBoolean(KEY_DELIVERY);
+    } */
 
     // Getters and setters
 
 
     @Override
     public String getObjectId() {
-        return objectId;
+        return getString(KEY_OBJECT_ID);
     }
 
     @Override
@@ -74,15 +78,16 @@ public class Listing extends ParseObject {
 
     @Override
     public Date getCreatedAt() {
-        return createdAt;
+        return getDate(KEY_CREATED_AT);
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
+    // TODO: Fix later
     public User getAuthor() {
-        return author;
+        return new User();
     }
 
     public void setAuthor(User author) {
@@ -90,14 +95,35 @@ public class Listing extends ParseObject {
     }
 
     public String getDescription() {
-        return description;
+        return getString(KEY_DESCRIPTION);
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    // TODO: Fix later
     public List<Image> getImages() {
+        // try {
+            List<ParseObject> rawImages = getList(KEY_IMAGES);
+            List<Image> images = new ArrayList<Image>();
+            for (ParseObject image : rawImages) {
+                ParseFile newImage = null;
+                try {
+                    newImage = image.fetchIfNeeded().getParseFile("image");
+                    Log.i("Listing", newImage.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // images.add(Image.parseFileProcess(newImage));
+
+
+                //images.add(Image.parseFileProcess(image));
+            }
+        // }
+        /* catch (ParseException e) {
+            e.printStackTrace();
+        } */
         return images;
     }
 
@@ -106,7 +132,8 @@ public class Listing extends ParseObject {
     }
 
     public double[] getLocation() {
-        return location;
+        List<Object> rawLocation = getList(KEY_LOCATION);
+        return  new double[]{(double) rawLocation.get(0), (double) rawLocation.get(1)};
     }
 
     public void setLocation(double[] location) {
@@ -114,7 +141,7 @@ public class Listing extends ParseObject {
     }
 
     public int getPrice() {
-        return price;
+        return getInt(KEY_PRICE);
     }
 
     public void setPrice(int price) {
@@ -122,7 +149,7 @@ public class Listing extends ParseObject {
     }
 
     public int getUnits() {
-        return units;
+        return getInt(KEY_UNITS);
     }
 
     public void setUnits(int units) {
@@ -130,7 +157,7 @@ public class Listing extends ParseObject {
     }
 
     public String getCategory() {
-        return category;
+        return getString(KEY_CATEGORY);
     }
 
     public void setCategory(String category) {
@@ -138,7 +165,12 @@ public class Listing extends ParseObject {
     }
 
     public List<String> getColors() {
-        return colors;
+        List<Object> rawColors = getList(KEY_COLORS);
+        List<String> processedColors = new ArrayList<String>();
+        for (Object color : rawColors) {
+            processedColors.add((String) color);
+        }
+        return processedColors;
     }
 
     public void setColors(List<String> colors) {
@@ -146,7 +178,7 @@ public class Listing extends ParseObject {
     }
 
     public Date getSellBy() {
-        return sellBy;
+        return getDate(KEY_SELL_BY);
     }
 
     public void setSellBy(Date sellBy) {
@@ -154,7 +186,7 @@ public class Listing extends ParseObject {
     }
 
     public boolean isDelivery() {
-        return delivery;
+        return getBoolean(KEY_DELIVERY);
     }
 
     public void setDelivery(boolean delivery) {

@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             ParseUser.logOut();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

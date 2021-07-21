@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                // Log.i("HomeFragment", listings.toString());
                 // Save received listings to data structure and notify adapter of new data
                 allListings.addAll(listings);
                 adapter.notifyDataSetChanged();

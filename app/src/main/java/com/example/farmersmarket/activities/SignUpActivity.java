@@ -72,6 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 // TODO: For debugging, remove after
                 Log.i(TAG, "email: " + email);
+                Toast.makeText(SignUpActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
 
                 // Error checking
                 boolean errors = checkForErrors(firstName, lastName, username, email, password, zip);
@@ -124,17 +125,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Create new ParseUser
         // TODO: Update with actual location
         // Error code:
-        // ParseUser newUser = User.userToParseUser(username, email, password, firstName + " " + lastName, new double[]{-122.148201, -122.148201});
-        // Non-error code:
-        ParseUser newUser = new ParseUser();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setEmail(email);
-        newUser.put(User.KEY_NAME, firstName + " " + lastName);
-        JSONArray parseLocation = new JSONArray();
-        parseLocation.put(-122.148201);
-        parseLocation.put(-122.148201);
-        newUser.put(User.KEY_LOCATION, parseLocation);
+        ParseUser newUser = User.userToParseUser(username, email, password, firstName + " " + lastName, new double[]{-122.148201, -122.148201});
 
         // Sign up with Parse
         newUser.signUpInBackground(new SignUpCallback() {

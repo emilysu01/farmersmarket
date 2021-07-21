@@ -2,6 +2,7 @@ package com.example.farmersmarket.models;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,11 @@ public class Image {
 
     private byte[] imageData;
 
+
+    /* public static Image parseObjectToImage(ParseObject parseObject) {
+        Image newImage = new Image();
+        newImage.
+    } */
 
     public static Image parseFileProcess(ParseFile parseFile) throws ParseException {
         Image newImage = new Image();

@@ -1,5 +1,10 @@
 package com.example.farmersmarket.models;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.example.farmersmarket.activities.LoginActivity;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -14,7 +19,7 @@ import org.json.JSONException;
 import java.util.List;
 
 @ParseClassName("User")
-public class User extends ParseObject {
+public class User extends ParseUser {
 
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_USERNAME = "username";
@@ -35,6 +40,7 @@ public class User extends ParseObject {
     public User() {
 
     }
+    
     public static ParseUser userToParseUser(String username, String password, String email, String name, double[] location) throws JSONException {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);

@@ -17,7 +17,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Listing.class);
         ParseObject.registerSubclass(User.class);
 
-       // Parse.enableLocalDatastore(this);
+       Parse.enableLocalDatastore(this);
 
         // TODO: Put API keys in separate doc
         Parse.initialize(new Parse.Configuration.Builder(this)

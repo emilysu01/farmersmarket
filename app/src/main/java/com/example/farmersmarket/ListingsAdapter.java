@@ -15,11 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.farmersmarket.activities.MainActivity;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
-import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
-import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
@@ -74,21 +71,23 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+
         }
 
         public void bind(Listing listing) {
             // Display UI components
             Log.i("ListingsAdapter", listing.getDescription());
-            Glide.with(context)
+            /* Glide.with(context)
                     .load(listing.getAuthor().getProfilePic())
                     .circleCrop()
-                    .into(ivProfilePic);
+                    .into(ivProfilePic); */
             tvUsername.setText(listing.getAuthor().getUsername());
             tvName.setText(listing.getAuthor().getName());
             tvDescription.setText(listing.getDescription());
-            /** Glide.with(context)
-                    .load(listing.getImage().getUrl())
-                    .into(ivListingPic); **/
+            // Log.i("ListingsAdapter", listing.getImages().toString());
+            Glide.with(context)
+                    .load(listing.getImages().get(0))
+                    .into(ivListingPic);
 
             // Set onClickListeners
             ivProfilePic.setOnClickListener(new View.OnClickListener() {
