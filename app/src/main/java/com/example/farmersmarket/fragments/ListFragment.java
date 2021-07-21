@@ -166,7 +166,7 @@ public class ListFragment extends Fragment {
     private void saveListing(String description, ParseUser currentUser, File photoFile) {
         // Set up new listing
         Listing listing = new Listing();
-        listing.setAuthor(ParseUser.getCurrentUser());
+        // listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
 
 
@@ -175,7 +175,7 @@ public class ListFragment extends Fragment {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        listing.setImage(new ParseFile(byteArray));
+        // listing.setImage(new ParseFile(byteArray));
 
         // Save new listing to database
         listing.saveInBackground(new SaveCallback() {

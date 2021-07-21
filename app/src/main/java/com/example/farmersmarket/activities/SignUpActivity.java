@@ -17,12 +17,14 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class SignUpActivity extends AppCompatActivity {
 
     public static final String TAG = "SignUpActivity";
 
+    // UI components
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etUsername;
@@ -68,6 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String zip = etZip.getText().toString();
 
+                // TODO: For debugging, remove after
+                Log.i(TAG, "email: " + email);
+
                 // Error checking
                 boolean errors = checkForErrors(firstName, lastName, username, email, password, zip);
                 if (!errors) {
@@ -75,7 +80,11 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 // Sign up
-                signUp(firstName, lastName, username, email, password, zip);
+                try {
+                    signUp(firstName, lastName, username, email, password, zip);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -106,19 +115,26 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
-    private void signUp(String firstName, String lastName, String username, String email, String password, String zip) {
+    private void signUp(String firstName, String lastName, String username, String email, String password, String zip) throws JSONException {
         Log.i(TAG, "Attempting to sign up user " + username);
 
+        // TODO: For debugging, remove after
+        Log.i(TAG, "email in sign up: " + email);
+
         // Create new ParseUser
+        // TODO: Update with actual location
+        // Error code:
+        // ParseUser newUser = User.userToParseUser(username, email, password, firstName + " " + lastName, new double[]{-122.148201, -122.148201});
+        // Non-error code:
         ParseUser newUser = new ParseUser();
-        // Default ParseUser fields
         newUser.setUsername(username);
-        newUser.setEmail(email);
         newUser.setPassword(password);
-        // Additional User fields
+        newUser.setEmail(email);
         newUser.put(User.KEY_NAME, firstName + " " + lastName);
-        newUser.put(User.KEY_ZIP, zip);
-        newUser.put(User.KEY_LISTINGS, new ArrayList<>());
+        JSONArray parseLocation = new JSONArray();
+        parseLocation.put(-122.148201);
+        parseLocation.put(-122.148201);
+        newUser.put(User.KEY_LOCATION, parseLocation);
 
         // Sign up with Parse
         newUser.signUpInBackground(new SignUpCallback() {

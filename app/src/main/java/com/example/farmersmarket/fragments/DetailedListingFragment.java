@@ -69,15 +69,15 @@ public class DetailedListingFragment extends Fragment {
         mvSellerLocation = view.findViewById(R.id.mvSellerLocation);
 
         // Display UI
-        ParseUser user = listing.getAuthor();
-        Glide.with(getContext())
+        // ParseUser user = listing.getAuthor();
+        /** Glide.with(getContext())
                 .load(user.getParseFile(User.KEY_PROFILE_PIC).getUrl())
                 .circleCrop()
                 .into(ivProfilePic);
         tvName.setText(user.getString(User.KEY_NAME));
-        Glide.with(getContext())
+         Glide.with(getContext())
                 .load(listing.getImage().getUrl())
-                .into(ivListingPic);
+                .into(ivListingPic); **/
         tvDescription.setText(listing.getDescription());
         mvSellerLocation.onCreate(savedInstanceState);
         mvSellerLocation.getMapAsync(callback);
@@ -117,8 +117,8 @@ public class DetailedListingFragment extends Fragment {
 
     private void goToProfileScreen(Listing listing) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        Fragment fragment = new ProfileFragment(listing.getAuthor());
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        //Fragment fragment = new ProfileFragment(listing.getAuthor());
+        //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
     @Override

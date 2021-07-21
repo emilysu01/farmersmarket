@@ -1,7 +1,7 @@
 package com.example.farmersmarket;
 
-import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,16 +78,17 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
         public void bind(Listing listing) {
             // Display UI components
+            Log.i("ListingsAdapter", listing.getDescription());
             Glide.with(context)
-                    .load(listing.getAuthor().getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                    .load(listing.getAuthor().getProfilePic())
                     .circleCrop()
                     .into(ivProfilePic);
             tvUsername.setText(listing.getAuthor().getUsername());
-            tvName.setText(listing.getAuthor().getString(User.KEY_NAME));
+            tvName.setText(listing.getAuthor().getName());
             tvDescription.setText(listing.getDescription());
-            Glide.with(context)
+            /** Glide.with(context)
                     .load(listing.getImage().getUrl())
-                    .into(ivListingPic);
+                    .into(ivListingPic); **/
 
             // Set onClickListeners
             ivProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +135,8 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     }
 
     private void goToProfileScreen(Listing listing) {
-        Fragment fragment = new ProfileFragment(listing.getAuthor());
-        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        // Fragment fragment = new ProfileFragment(listing.getAuthor());
+        //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
     private void goToDetailedListingScreen(Listing listing) {

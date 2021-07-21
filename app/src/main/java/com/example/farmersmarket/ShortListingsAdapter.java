@@ -67,9 +67,9 @@ public class ShortListingsAdapter extends RecyclerView.Adapter<ShortListingsAdap
 
         public void bind(Listing listing) {
             // Display UI components
-            Glide.with(context)
+            /** Glide.with(context)
                     .load(listing.getImage().getUrl())
-                    .into(ivPicture);
+                    .into(ivPicture); **/
             ivPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
