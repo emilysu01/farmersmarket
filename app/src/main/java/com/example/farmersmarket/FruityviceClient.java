@@ -1,5 +1,7 @@
 package com.example.farmersmarket;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,11 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.loopj.android.http.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cz.msebera.android.httpclient.Header;
 
 public class FruityviceClient {
 
-    public static List<String> getAllFruits() {
+    public static List<String> getAllCategories() {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -23,17 +30,32 @@ public class FruityviceClient {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
                         // called when response HTTP status is "200 OK"
-                        System.out.println("Success");
+                        try {
+                            Log.i("MainActivity", "Success");
+                            JSONArray rawJsonArray = new JSONArray(res);
+                            List<JSONObject> processedJsonArray = new ArrayList<JSONObject>();
+                            for (int i = 0; i < rawJsonArray.length(); i++) {
+                                JSONObject jsonObj = rawJsonArray.getJSONObject(i);
+                                processedJsonArray.add(jsonObj);
+                                Log.i("JSON Objects", jsonObj.getString("name"));
+                            }
+
+                            // Log.i("MainActivity", jsonObj.getString("ID"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                        System.out.println("Failure");
+                        Log.i("MainActivity", "Failure");
+                        Log.i("MainActivity", "Error: " + t.toString());
                     }
                 }
         );
 
         return new ArrayList<String>();
     }
+
 }
