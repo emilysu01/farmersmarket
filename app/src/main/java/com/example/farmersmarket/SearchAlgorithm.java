@@ -13,6 +13,7 @@ import com.parse.ParseQuery;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,32 +21,77 @@ import cz.msebera.android.httpclient.Header;
 
 public class SearchAlgorithm {
 
+    // Tag for logging statements
     public static final String TAG = "SearchAlgorithm";
 
-    public static void searchByKeyword(String rawSearch) {
+    private static ArrayList<Listing> searchResults = new ArrayList<Listing>();
+
+    private static ArrayList<Listing> listings;
+    private static ShortListingsAdapter adapter;
+
+    public static void search(String rawSearch, ArrayList<Listing> listings, ShortListingsAdapter adapter) {
         // Regularize input by making everything lowercase
         String processedSearch = rawSearch.toLowerCase();
         String[] splitSearch = processedSearch.split("\\s+");
 
-        // Determine which category the search is in
-        // List<String> allCategories =
-        getCategory(splitSearch);
+        // Search
+        searchByKeywords(splitSearch, listings, adapter);
     }
 
-    private static ArrayList<Listing> queryListings(String category) {
-        // Initialize query
-        ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
+    private static void searchByKeywords(String[] searchKeywords, ArrayList<Listing> listings, ShortListingsAdapter adapter) {
+        // Set up and make API call to Fruityvice
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get("https://www.fruityvice.com/api/fruit/all", params, new TextHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String res) {
+                try {
+                    // Parse API call results to get all categories
+                    JSONArray rawJsonArray = new JSONArray(res);
+                    ArrayList<String> allCategories = new ArrayList<String>();
+                    for (int i = 0; i < rawJsonArray.length(); i++) {
+                        String category = rawJsonArray.getJSONObject(i).getString("name").toLowerCase();
+                        allCategories.add(category);
+                    }
 
-        // Get the full details of the user who made the post
+                    // Find the search category
+                    String category = findCategory(searchKeywords, allCategories);
+                    // If there are no matching categories, stop the search
+                    if (category.isEmpty()) {
+                        return;
+                    }
+
+                    // Query the database for relevant listings
+                    queryListings(category, listings, adapter);
+
+                } catch (JSONException e) {
+                    Log.i(TAG, "Error with parsing Fruityvice data", e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                Log.i(TAG, "Error with retrieving Fruityvice data", t);
+            }
+        });
+    }
+
+    private static String findCategory(String[] searchKeywords, List<String> allCategories) {
+        // Determine the category of the listing
+        for (String keyword : searchKeywords) {
+            if (allCategories.contains(keyword)) {
+                return keyword;
+            }
+        }
+        return "";
+    }
+
+    private static void queryListings(String category, ArrayList<Listing> allListings, ShortListingsAdapter adapter) {
+        ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
         query.include(Listing.KEY_AUTHOR);
         query.whereEqualTo(Listing.KEY_CATEGORY, category);
-        // query.addDescendingOrder(Listing.KEY_CREATED_AT);
-        // query.addDescendingOrder(Listing.KEY_CREATED_AT);
-
         // TODO: Implement optimization techniques
-        // Limit the number of posts the user sees to 100
         query.setLimit(100);
-
         ArrayList<Listing> searchResults = new ArrayList<Listing>();
         query.findInBackground(new FindCallback<Listing>() {
             @Override
@@ -54,104 +100,27 @@ public class SearchAlgorithm {
                     Log.e(TAG, "Issue with getting posts", e);
                     return;
                 } else {
+                    Log.i("Posts", listings.toString());
                     searchResults.addAll(listings);
+
+                    allListings.addAll(listings);
+                    adapter.notifyDataSetChanged();
+
+                    // Send data to update the UI
+                    // setSearchResults(allListings, adapter);
                 }
             }
         });
+    }
+
+    public static ArrayList<Listing> getSearchResults() {
         return searchResults;
     }
 
-    private static String checkCategory(String[] searchKeywords, List<String> categories) {
-        Log.i("Check Category", "here");
-        for (String keyword : searchKeywords) {
-            Log.i("Keyword: " + keyword, String.valueOf(categories.contains(keyword)));
-            for (String category : categories) {
-                if (keyword.equals(category)) {
-                    return category;
-                }
-            }
-        }
-        return "";
-    }
-
-    private static void getCategory(String[] searchKeywords) {
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        final String[] returnedCategory = new String[1];
-        client.get("https://www.fruityvice.com/api/fruit/all", params, new TextHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String res) {
-                        // called when response HTTP status is "200 OK"
-                        try {
-                            JSONArray rawJsonArray = new JSONArray(res);
-                            List<String> allCategories = new ArrayList<String>();
-                            for (int i = 0; i < rawJsonArray.length(); i++) {
-                                String category = rawJsonArray.getJSONObject(i).getString("name").toLowerCase();
-                                allCategories.add(category);
-                            }
-
-                            for (String keyword : searchKeywords) {
-                                Log.i("Contains? ", String.valueOf(allCategories.contains(keyword)));
-                                if (allCategories.contains(keyword)) {
-                                    returnedCategory[0] = keyword;
-                                    Log.i("Keyword inside", returnedCategory[0]);
-                                    break;
-                                }
-                            }
-
-                            if (returnedCategory[0].isEmpty()) {
-                                return;
-                            }
-
-                            // Query the database for relevant listings
-                            // Initialize query
-                            ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-
-                            // Get the full details of the user who made the post
-                            query.include(Listing.KEY_AUTHOR);
-                            query.whereEqualTo(Listing.KEY_CATEGORY, returnedCategory[0]);
-
-                            Log.i("category", returnedCategory[0]);
-                            // query.addDescendingOrder(Listing.KEY_CREATED_AT);
-                            // query.addDescendingOrder(Listing.KEY_CREATED_AT);
-
-                            // TODO: Implement optimization techniques
-                            // Limit the number of posts the user sees to 100
-                            query.setLimit(100);
-
-                            ArrayList<Listing> searchResults = new ArrayList<Listing>();
-                            query.findInBackground(new FindCallback<Listing>() {
-                                @Override
-                                public void done(List<Listing> listings, ParseException e) {
-                                    if (e != null) {
-                                        Log.e(TAG, "Issue with getting posts", e);
-                                        return;
-                                    } else {
-                                        Log.i("results? ", listings.toString());
-                                        searchResults.addAll(listings);
-                                        Log.i("search results? ", searchResults.toString());
-                                    }
-                                }
-                            });
-
-
-                            // Log.i("MainActivity", jsonObj.getString("ID"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                        // Log.i("MainActivity", "Failure");
-                        // Log.i("MainActivity", "Error: " + t.toString());
-                    }
-                }
-        );
-
-        // Log.i("Keyword outside", returnedCategory[0]);
-        // return returnedCategory[0];
+    public static void setSearchResults(ArrayList<Listing> allListings, ShortListingsAdapter adapter) {
+        ArrayList<Listing> getSearchResults = SearchAlgorithm.getSearchResults();
+        allListings.addAll(getSearchResults);
+        adapter.notifyDataSetChanged();
+        Log.i("All Listings", allListings.toString());
     }
 }
