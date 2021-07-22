@@ -20,6 +20,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Tag for logging statements
     public static final String TAG = "MainActivity";
 
     final FragmentManager fragmentManager = getSupportFragmentManager();

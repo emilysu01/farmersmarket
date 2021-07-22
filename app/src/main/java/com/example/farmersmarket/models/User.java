@@ -5,11 +5,8 @@ import android.widget.Toast;
 
 import com.example.farmersmarket.activities.LoginActivity;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -18,9 +15,10 @@ import org.json.JSONException;
 
 import java.util.List;
 
-@ParseClassName("User")
+@ParseClassName("_User")
 public class User extends ParseUser {
 
+    public static final String TAG = "User";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
@@ -40,7 +38,28 @@ public class User extends ParseUser {
     public User() {
 
     }
-    
+
+
+    public static User getCurrentUser() {
+        return (User) ParseUser.getCurrentUser();
+    }
+
+    public static boolean login(String username, String password) {
+        final boolean[] success = new boolean[1];
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                // Error checking
+                if (e != null) {
+                    Log.e(TAG, "Issue with logging in", e);
+                    success[0] = false;
+                } else {
+                    success[0] = true;
+                }
+            }
+        });
+        return success[0];
+    }
     public static ParseUser userToParseUser(String username, String password, String email, String name, double[] location) throws JSONException {
         ParseUser newUser = new ParseUser();
         newUser.setUsername(username);

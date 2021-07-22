@@ -7,6 +7,10 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +32,7 @@ public class Listing extends ParseObject {
     public static final String KEY_SELL_BY = "sellBy";
     public static final String KEY_DELIVERY = "delivery";
 
-    //
+    // Object attributes
     private String objectId;
     private Date createdAt;
     private User author;
@@ -64,8 +68,6 @@ public class Listing extends ParseObject {
     } */
 
     // Getters and setters
-
-
     @Override
     public String getObjectId() {
         return getString(KEY_OBJECT_ID);
@@ -104,10 +106,23 @@ public class Listing extends ParseObject {
 
     // TODO: Fix later
     public List<Image> getImages() {
-        // try {
-            List<ParseObject> rawImages = getList(KEY_IMAGES);
+        try {
+            JSONArray rawImages = getJSONArray(KEY_IMAGES);
             List<Image> images = new ArrayList<Image>();
-            for (ParseObject image : rawImages) {
+            for (int i = 0; i < rawImages.length(); i += 1) {
+                Log.i("Listing JSON", rawImages.getJSONObject(i).toString());
+                JSONObject jsonObject = rawImages.getJSONObject(i);
+                // TODO
+                images.add(Image.jsonObjectToImage(jsonObject));
+                Log.i("Listing Image", Image.jsonObjectToImage(jsonObject).toString());
+            }
+            return images;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<Image>();
+
+                /*
                 ParseFile newImage = null;
                 try {
                     newImage = image.fetchIfNeeded().getParseFile("image");
@@ -117,14 +132,14 @@ public class Listing extends ParseObject {
                 }
                 // images.add(Image.parseFileProcess(newImage));
 
-
                 //images.add(Image.parseFileProcess(image));
-            }
+
+        }
         // }
         /* catch (ParseException e) {
             e.printStackTrace();
-        } */
-        return images;
+        }
+        return images; */
     }
 
     public void setImages(List<Image> images) {
@@ -191,5 +206,11 @@ public class Listing extends ParseObject {
 
     public void setDelivery(boolean delivery) {
         this.delivery = delivery;
+    }
+
+    public static void makeImages(Listing listing) {
+        for (Image thisImage : listing.getImages()) {
+            thisImage.parseFile = Image.queryParseFile(thisImage.id);
+        }
     }
 }
