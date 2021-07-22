@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
         }
         tvName.setText(user.getString(User.KEY_NAME));
         tvUsername.setText(user.getString(User.KEY_USERNAME));
-        tvLocation.setText(user.getString(User.KEY_LOCATION));
+        // tvLocation.setText(user.getString(User.KEY_LOCATION));
 
         // Retrieve listings from database
         queryListings(user);

@@ -3,14 +3,14 @@ package com.example.farmersmarket.models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,54 +18,22 @@ import java.util.List;
 @ParseClassName("Listing")
 public class Listing extends ParseObject {
 
+    // Tag for logging statements
+    public static final String TAG = "Listing";
+
     // Database keys
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_AUTHOR = "author";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGES = "images";
-    public static final String KEY_LOCATION = "location";
+    public static final String KEY_COORDINATES = "coordinates";
     public static final String KEY_PRICE = "price";
     public static final String KEY_UNITS = "units";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_COLORS = "colors";
     public static final String KEY_SELL_BY = "sellBy";
     public static final String KEY_DELIVERY = "delivery";
-
-    // Object attributes
-    private String objectId;
-    private Date createdAt;
-    private User author;
-    private String description;
-    private List<Image> images;
-    private double[] location;
-    private int price;
-    private int units;
-    private String category;
-    private List<String> colors;
-    private Date sellBy;
-    private boolean delivery;
-
-    /* public Listing() {
-        objectId = getString(KEY_OBJECT_ID);
-        createdAt = getDate(KEY_CREATED_AT);
-        author = new User(getParseUser(KEY_AUTHOR));
-        description = getString(KEY_DESCRIPTION);
-        List<Object> rawImages = getList(KEY_IMAGES);
-        images = Image.rawToProcessedList(rawImages);
-        List<Object> rawLocation = getList(KEY_LOCATION);
-        location = new double[]{(double) rawLocation.get(0), (double) rawLocation.get(1)};
-        price = getInt(KEY_PRICE);
-        units = getInt(KEY_UNITS);
-        category = getString(KEY_CATEGORY);
-        List<Object> rawColors = getList(KEY_COLORS);
-        colors = new ArrayList<String>();
-        for (Object color : rawColors) {
-            this.colors.add((String) color);
-        }
-        sellBy = getDate(KEY_SELL_BY);
-        delivery = getBoolean(KEY_DELIVERY);
-    } */
 
     // Getters and setters
     @Override
@@ -75,7 +43,7 @@ public class Listing extends ParseObject {
 
     @Override
     public void setObjectId(String objectId) {
-        this.objectId = objectId;
+        put(KEY_OBJECT_ID, objectId);
     }
 
     @Override
@@ -84,16 +52,16 @@ public class Listing extends ParseObject {
     }
 
     public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+        put(KEY_CREATED_AT, createdAt);
     }
 
-    // TODO: Fix later
     public User getAuthor() {
-        return new User();
+        ParseUser parseUser = getParseUser(KEY_AUTHOR);
+        return new User(parseUser);
     }
 
     public void setAuthor(User author) {
-        this.author = author;
+        put(KEY_AUTHOR, author.userToParseUser());
     }
 
     public String getDescription() {
@@ -101,10 +69,10 @@ public class Listing extends ParseObject {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        put(KEY_DESCRIPTION, description);
     }
 
-    // TODO: Fix later
+    // TODO
     public List<Image> getImages() {
         try {
             JSONArray rawImages = getJSONArray(KEY_IMAGES);
@@ -121,38 +89,34 @@ public class Listing extends ParseObject {
             e.printStackTrace();
         }
         return new ArrayList<Image>();
-
-                /*
-                ParseFile newImage = null;
-                try {
-                    newImage = image.fetchIfNeeded().getParseFile("image");
-                    Log.i("Listing", newImage.toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                // images.add(Image.parseFileProcess(newImage));
-
-                //images.add(Image.parseFileProcess(image));
-
-        }
-        // }
-        /* catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return images; */
     }
 
+    // TODO
     public void setImages(List<Image> images) {
-        this.images = images;
+        return;
     }
 
-    public double[] getLocation() {
-        List<Object> rawLocation = getList(KEY_LOCATION);
-        return  new double[]{(double) rawLocation.get(0), (double) rawLocation.get(1)};
+    public double[] getCoordinates() {
+        try {
+            JSONArray rawCoordinates = getJSONArray(KEY_COORDINATES);
+            double latitude = rawCoordinates.getDouble(0);
+            double longitude = rawCoordinates.getDouble(1);
+            return new double[]{latitude, longitude};
+        } catch (JSONException e) {
+            Log.e(TAG, "JSON Exception", e);
+            return new double[1];
+        }
     }
 
-    public void setLocation(double[] location) {
-        this.location = location;
+    public void setCoordinates(double[] coordinates) {
+        try {
+            JSONArray parseCoordinates = new JSONArray();
+            parseCoordinates.put(coordinates[0]);
+            parseCoordinates.put(coordinates[1]);
+            put(KEY_COORDINATES, parseCoordinates);
+        } catch (JSONException e) {
+            Log.e(TAG, "JSONException", e);
+        }
     }
 
     public int getPrice() {
@@ -160,7 +124,7 @@ public class Listing extends ParseObject {
     }
 
     public void setPrice(int price) {
-        this.price = price;
+        put(KEY_PRICE, price);
     }
 
     public int getUnits() {
@@ -168,7 +132,7 @@ public class Listing extends ParseObject {
     }
 
     public void setUnits(int units) {
-        this.units = units;
+        put(KEY_UNITS, units);
     }
 
     public String getCategory() {
@@ -176,20 +140,29 @@ public class Listing extends ParseObject {
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        put(KEY_CATEGORY, category);
     }
 
     public List<String> getColors() {
-        List<Object> rawColors = getList(KEY_COLORS);
-        List<String> processedColors = new ArrayList<String>();
-        for (Object color : rawColors) {
-            processedColors.add((String) color);
+        try {
+            JSONArray rawColors = getJSONArray(KEY_COLORS);
+            List<String> processedColors = new ArrayList<String>();
+            for (int i = 0; i < rawColors.length(); i += 1) {
+                processedColors.add(rawColors.getString(i));
+            }
+            return processedColors;
+        } catch (JSONException e) {
+            Log.e(TAG, "JSON Exception", e);
+            return new ArrayList<String>();
         }
-        return processedColors;
     }
 
     public void setColors(List<String> colors) {
-        this.colors = colors;
+        JSONArray parseColors = new JSONArray();
+        for (String color : colors) {
+            parseColors.put(color);
+        }
+        put(KEY_COLORS, parseColors);
     }
 
     public Date getSellBy() {
@@ -197,7 +170,7 @@ public class Listing extends ParseObject {
     }
 
     public void setSellBy(Date sellBy) {
-        this.sellBy = sellBy;
+        put(KEY_SELL_BY, sellBy);
     }
 
     public boolean isDelivery() {
@@ -205,12 +178,6 @@ public class Listing extends ParseObject {
     }
 
     public void setDelivery(boolean delivery) {
-        this.delivery = delivery;
-    }
-
-    public static void makeImages(Listing listing) {
-        for (Image thisImage : listing.getImages()) {
-            thisImage.parseFile = Image.queryParseFile(thisImage.id);
-        }
+        put(KEY_DELIVERY, delivery);
     }
 }

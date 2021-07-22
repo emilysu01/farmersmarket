@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    // Tag for logging statements
     public static final String TAG = "SignUpActivity";
 
     // UI components
@@ -125,10 +126,10 @@ public class SignUpActivity extends AppCompatActivity {
         // Create new ParseUser
         // TODO: Update with actual location
         // Error code:
-        ParseUser newUser = User.userToParseUser(username, email, password, firstName + " " + lastName, new double[]{-122.148201, -122.148201});
-
+        User newUser = new User(username, password, email, firstName + " " + lastName, new double[]{-122.148201, -122.148201}, "94704");
+        ParseUser newParseUser = newUser.userToParseUser();
         // Sign up with Parse
-        newUser.signUpInBackground(new SignUpCallback() {
+        newParseUser.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null) {

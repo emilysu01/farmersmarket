@@ -2,10 +2,8 @@ package com.example.farmersmarket.models;
 
 import android.util.Log;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -21,8 +19,10 @@ import java.util.List;
 @ParseClassName("Image")
 public class Image extends ParseObject {
 
+    // Tag for logging statements
     public static final String TAG = "Image";
 
+    // Database keys
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_IMAGE = "image";
 

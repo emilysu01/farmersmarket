@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Checks if a user is already logged in
-        if (User.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             goToMainActivity();
         }
 
@@ -90,15 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, "Attempting to log in user " + username);
 
         // Log in with Parse
-        boolean successLogin = User.login(username, password);
-        if (successLogin) {
-            Toast.makeText(LoginActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
-            // Move to main screen
-            goToMainActivity();
-        } else {
-            Toast.makeText(LoginActivity.this, "Issue with login. Please try again.", Toast.LENGTH_SHORT).show();
-        }
-
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {

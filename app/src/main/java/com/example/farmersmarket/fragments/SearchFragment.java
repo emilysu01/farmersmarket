@@ -14,6 +14,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.farmersmarket.R;
+import com.example.farmersmarket.SearchAlgorithm;
+import com.example.farmersmarket.models.Listing;
+
+import java.util.List;
 
 public class SearchFragment extends Fragment {
 
@@ -58,6 +62,7 @@ public class SearchFragment extends Fragment {
 
     // TODO: Implement searching algorithm
     private void search(String search) {
-        Toast.makeText(getContext(), "Searching", Toast.LENGTH_SHORT).show();
+        SearchAlgorithm.searchByKeyword(search);
+
     }
 }

@@ -20,8 +20,6 @@ public class ParseApplication extends Application {
         // ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Image.class);
 
-        ParseUser.registerSubclass(User.class);
-
         Parse.enableLocalDatastore(this);
 
         // TODO: Put API keys in separate doc

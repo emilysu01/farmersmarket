@@ -80,10 +80,10 @@ public class HomeFragment extends Fragment {
 
                 // Save received listings to data structure and notify adapter of new data
                 allListings.addAll(listings);
-                for (Listing thisListing : listings) {
+                /* for (Listing thisListing : listings) {
                     Listing.makeImages(thisListing);
 
-                }
+                } */
                 Log.i("HomeFragment", allListings.toString());
                 adapter.notifyDataSetChanged();
             }

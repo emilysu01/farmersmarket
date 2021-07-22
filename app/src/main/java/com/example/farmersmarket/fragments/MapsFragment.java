@@ -1,4 +1,4 @@
-package com.example.farmersmarket.activities;
+package com.example.farmersmarket.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
