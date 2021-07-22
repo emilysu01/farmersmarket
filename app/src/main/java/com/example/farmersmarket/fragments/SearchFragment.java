@@ -1,11 +1,6 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +8,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.SearchAlgorithm;
-import com.example.farmersmarket.models.Listing;
-
-import java.util.List;
 
 public class SearchFragment extends Fragment {
 
