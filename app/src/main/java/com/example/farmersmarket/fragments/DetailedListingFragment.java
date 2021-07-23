@@ -23,7 +23,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.ParseUser;
 
 public class DetailedListingFragment extends Fragment {
 
@@ -80,6 +79,14 @@ public class DetailedListingFragment extends Fragment {
         mvSellerLocation.onCreate(savedInstanceState);
         mvSellerLocation.getMapAsync(callback);
 
+        // Set onClickListener to go to new screen
+        ivListingPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToFullScreenImageScreen();
+            }
+        });
+
         // Set onClickListeners for profile picture and name
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +123,12 @@ public class DetailedListingFragment extends Fragment {
     private void goToProfileScreen(Listing listing) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         Fragment fragment = new ProfileFragment(listing.getAuthor());
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
+    private void goToFullScreenImageScreen() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment = new FullScreenImageFragment(listing.getImages().get(0));
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
