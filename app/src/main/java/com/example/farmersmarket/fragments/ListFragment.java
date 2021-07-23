@@ -1,10 +1,16 @@
 package com.example.farmersmarket.fragments;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,13 +29,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.util.ContentLengthInputStream;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -49,6 +63,8 @@ import java.util.Date;
 import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.Context.LOCATION_SERVICE;
 
 public class ListFragment extends Fragment {
 
@@ -71,6 +87,8 @@ public class ListFragment extends Fragment {
     // Photo file information
     public File photoFile;
     public String photoFileName;
+
+    private FusedLocationProviderClient client;
 
     // Required empty public constructor
     public ListFragment() {
@@ -99,9 +117,9 @@ public class ListFragment extends Fragment {
         final String[] categorySelected = {""};
         ArrayList<String> allCategories = new ArrayList<String>();
         allCategories.add("Category");
-        AsyncHttpClient client = new AsyncHttpClient();
+        final AsyncHttpClient[] client = {new AsyncHttpClient()};
         RequestParams params = new RequestParams();
-        client.get("https://www.fruityvice.com/api/fruit/all", params, new TextHttpResponseHandler() {
+        client[0].get("https://www.fruityvice.com/api/fruit/all", params, new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String res) {
                 try {
@@ -188,10 +206,33 @@ public class ListFragment extends Fragment {
                     return;
                 }
 
+                // Retrive user's location
+                LatLng coordinates = getLocation();
+                if (coordinates == null) {
+                    Toast.makeText(getContext(), "There was an issue retrieving your location", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // Save listing to database
-                saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0]);
+                saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0], coordinates);
             }
         });
+    }
+
+    private LatLng getLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return null;
+        }
+
+        Criteria criteria = new Criteria();
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(provider);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        LatLng newPos = new LatLng(latitude, longitude);
+        return newPos;
     }
 
     private void launchUploader() {
@@ -242,13 +283,15 @@ public class ListFragment extends Fragment {
         }
     }
 
-    private void saveListing(String description, ParseUser currentUser, File photoFile, String category) {
+    private void saveListing(String description, ParseUser currentUser, File photoFile, String category, LatLng coordinates) {
+
+
         // Create new listing
         // TODO: Update with actual data
         Listing listing = new Listing();
         listing.setAuthor(new User(ParseUser.getCurrentUser()));
         listing.setDescription(description);
-        listing.setCoordinates(new double[]{37.484928, -122.148201});
+        listing.setCoordinates(new double[]{coordinates.latitude, coordinates.longitude});
         listing.setPrice(10);
         listing.setUnits(1);
         listing.setCategory(category);

@@ -8,6 +8,11 @@
         android:title="Home"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_explore"
+        android:icon="@drawable/ic_location"
+        android:title="Explore"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:title="Search"

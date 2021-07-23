@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.farmersmarket.R;
+import com.example.farmersmarket.fragments.ExploreFragment;
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
                 int clicked = item.getItemId();
                 if (clicked == R.id.action_home) {
                     fragment = new HomeFragment();
+                } else if (clicked == R.id.action_explore) {
+                    fragment = new ExploreFragment();
                 } else if (clicked == R.id.action_search) {
                     fragment = new SearchFragment();
                 } else if (clicked == R.id.action_list) {
