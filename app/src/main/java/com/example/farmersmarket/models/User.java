@@ -1,6 +1,8 @@
 package com.example.farmersmarket.models;
 
 import android.util.Log;
+
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -90,6 +92,10 @@ public class User {
 
     public String getZip() {
         return parseUser.getString(KEY_ZIP);
+    }
+
+    public ParseFile getProfilePic() {
+        return parseUser.getParseFile(KEY_PROFILE_PIC);
     }
 
 }

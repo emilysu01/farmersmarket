@@ -3,6 +3,7 @@ package com.example.farmersmarket.models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -72,28 +73,12 @@ public class Listing extends ParseObject {
         put(KEY_DESCRIPTION, description);
     }
 
-    // TODO
-    public List<Image> getImages() {
-        try {
-            JSONArray rawImages = getJSONArray(KEY_IMAGES);
-            List<Image> images = new ArrayList<Image>();
-            for (int i = 0; i < rawImages.length(); i += 1) {
-                Log.i("Listing JSON", rawImages.getJSONObject(i).toString());
-                JSONObject jsonObject = rawImages.getJSONObject(i);
-                // TODO
-                images.add(Image.jsonObjectToImage(jsonObject));
-                Log.i("Listing Image", Image.jsonObjectToImage(jsonObject).toString());
-            }
-            return images;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<Image>();
+    public List<ParseFile> getImages() {
+        return getList(KEY_IMAGES);
     }
 
-    // TODO
-    public void setImages(List<Image> images) {
-        return;
+    public void setImages(List<ParseFile> images) {
+        put(KEY_IMAGES, images);
     }
 
     public double[] getCoordinates() {

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
-import com.example.farmersmarket.models.Image;
 import com.example.farmersmarket.models.Listing;
 
 import java.util.List;
@@ -78,18 +77,18 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
         public void bind(Listing listing) {
             // Display UI components
-            /* Glide.with(context)
-                    .load(listing.getAuthor().getProfilePic())
+            Glide.with(context)
+                    .load(listing.getAuthor().getProfilePic().getUrl())
                     .circleCrop()
-                    .into(ivProfilePic); */
+                    .into(ivProfilePic);
             tvUsername.setText(listing.getAuthor().getUsername());
             tvName.setText(listing.getAuthor().getName());
             tvDescription.setText(listing.getDescription());
-            Log.i("Error here? ", listing.getImages().toString());
-            Log.i("Type", listing.getImages().get(0).id);
-            /* Glide.with(context)
-                    .load(Image.parseFileToByteArray(listing.getImages().get(0)))
-                    .into(ivListingPic); */
+            // Log.i("Error here? ", listing.getImages().toString());
+            Log.i("IMAGES", listing.getImages().toString());
+            Glide.with(context)
+                    .load(listing.getImages().get(0).getUrl())
+                    .into(ivListingPic);
 
             // Set onClickListeners
             ivProfilePic.setOnClickListener(new View.OnClickListener() {

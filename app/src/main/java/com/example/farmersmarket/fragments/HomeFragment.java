@@ -25,8 +25,10 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    // Tag for logging statements
     public static final String TAG = "HomeFragment";
 
+    // UI components
     private RecyclerView rvListings;
 
     private List<Listing> allListings = new ArrayList<>();
@@ -77,13 +79,22 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                /*
+                ParseQuery<Image> query = ParseQuery.getQuery(Image.class);
+                query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e == null) {
+                            // row of Object Id "Current USer"
+                        } else {
+                            // error
+                        }
+                    }
+                }); */
+
 
                 // Save received listings to data structure and notify adapter of new data
                 allListings.addAll(listings);
-                /* for (Listing thisListing : listings) {
-                    Listing.makeImages(thisListing);
-
-                } */
                 Log.i("HomeFragment", allListings.toString());
                 adapter.notifyDataSetChanged();
             }

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
+import com.example.farmersmarket.models.User;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -35,6 +36,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
@@ -166,8 +168,18 @@ public class ListFragment extends Fragment {
     private void saveListing(String description, ParseUser currentUser, File photoFile) {
         // Set up new listing
         Listing listing = new Listing();
-        // listing.setAuthor(ParseUser.getCurrentUser());
+        listing.setAuthor(new User(ParseUser.getCurrentUser()));
         listing.setDescription(description);
+        listing.setCoordinates(new double[]{37.484928, -122.148201});
+        listing.setPrice(10);
+        listing.setUnits(1);
+        listing.setCategory("apple");
+        ArrayList<String> colors = new ArrayList<String>();
+        colors.add("yellow");
+        listing.setColors(colors);
+        listing.setSellBy(new Date());
+        listing.setDelivery(false);
+
 
 
         Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
@@ -175,7 +187,9 @@ public class ListFragment extends Fragment {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        // listing.setImage(new ParseFile(byteArray));
+        ArrayList<ParseFile> arr = new ArrayList<ParseFile>();
+        arr.add(new ParseFile(byteArray));
+        listing.setImages(arr);
 
         // Save new listing to database
         listing.saveInBackground(new SaveCallback() {

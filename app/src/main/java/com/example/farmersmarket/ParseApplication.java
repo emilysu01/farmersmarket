@@ -2,12 +2,9 @@ package com.example.farmersmarket;
 
 import android.app.Application;
 
-import com.example.farmersmarket.models.Image;
 import com.example.farmersmarket.models.Listing;
-import com.example.farmersmarket.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 public class ParseApplication extends Application {
 
@@ -18,7 +15,6 @@ public class ParseApplication extends Application {
         // Register Listing class with Parse
         ParseObject.registerSubclass(Listing.class);
         // ParseObject.registerSubclass(User.class);
-        ParseObject.registerSubclass(Image.class);
 
         Parse.enableLocalDatastore(this);
 
