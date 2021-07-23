@@ -23,10 +23,11 @@ public class MainActivity extends AppCompatActivity {
     // Tag for logging statements
     public static final String TAG = "MainActivity";
 
-    final FragmentManager fragmentManager = getSupportFragmentManager();
-
     // UI components
     private BottomNavigationView bottomNavigationView;
+
+    // Fragment manager
+    final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (clicked == R.id.action_list) {
                     fragment = new ListFragment();
                 } else {
-                    fragment = new ProfileFragment(ParseUser.getCurrentUser());
+                    fragment = new ProfileFragment();
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu (adds items to the action bar if it's present)
         getMenuInflater().inflate(R.menu.menu_main, menu);
         // Must return true for the menu to be displayed
         return true;

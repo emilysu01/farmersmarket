@@ -1,7 +1,5 @@
 package com.example.farmersmarket.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,13 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -51,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tvLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
 
-        // Set onClickListener for log in link and sign up button
+        // Set onClickListener for log in link
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +59,8 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Set onClickListener for sign up button
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,10 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String zip = etZip.getText().toString();
 
-                // TODO: For debugging, remove after
-                Log.i(TAG, "email: " + email);
-                Toast.makeText(SignUpActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-
                 // Error checking
                 boolean errors = checkForErrors(firstName, lastName, username, email, password, zip);
                 if (!errors) {
@@ -82,16 +79,12 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 // Sign up
-                try {
-                    signUp(firstName, lastName, username, email, password, zip);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                signUp(firstName, lastName, username, email, password, zip);
             }
         });
     }
 
-    // TODO: Do more detailed error checking
+    // TODO: Add more detailed error checking
     private boolean checkForErrors(String firstName, String lastName, String username, String email, String password, String zip) {
         // Check for empty fields
         if (firstName.isEmpty() || lastName.isEmpty()) {
@@ -117,17 +110,14 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
-    private void signUp(String firstName, String lastName, String username, String email, String password, String zip) throws JSONException {
-        Log.i(TAG, "Attempting to sign up user " + username);
+    private void signUp(String firstName, String lastName, String username, String email, String password, String zip) {
+        Log.i(TAG, "Attempting to sign up user with username " + username);
 
-        // TODO: For debugging, remove after
-        Log.i(TAG, "email in sign up: " + email);
-
-        // Create new ParseUser
+        // Create new user
         // TODO: Update with actual location
-        // Error code:
-        User newUser = new User(username, password, email, firstName + " " + lastName, new double[]{-122.148201, -122.148201}, "94704");
+        User newUser = new User(username, password, email, firstName + " " + lastName, new double[]{-122.148201, -122.148201}, zip);
         ParseUser newParseUser = newUser.userToParseUser();
+
         // Sign up with Parse
         newParseUser.signUpInBackground(new SignUpCallback() {
             @Override

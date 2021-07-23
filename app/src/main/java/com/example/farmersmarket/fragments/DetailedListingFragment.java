@@ -1,18 +1,17 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
@@ -22,15 +21,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
-
 public class DetailedListingFragment extends Fragment {
 
+    // UI components
     private ImageView ivProfilePic;
     private TextView tvName;
     private ImageView ivListingPic;
@@ -38,6 +35,7 @@ public class DetailedListingFragment extends Fragment {
     private Button btnContact;
     private MapView mvSellerLocation;
 
+    // Current listing
     private Listing listing;
 
     // Required empty public constructor
@@ -69,27 +67,26 @@ public class DetailedListingFragment extends Fragment {
         mvSellerLocation = view.findViewById(R.id.mvSellerLocation);
 
         // Display UI
-        // ParseUser user = listing.getAuthor();
-        /** Glide.with(getContext())
-                .load(user.getParseFile(User.KEY_PROFILE_PIC).getUrl())
+        User user = listing.getAuthor();
+        Glide.with(getContext())
+                .load(user.getProfilePic().getUrl())
                 .circleCrop()
                 .into(ivProfilePic);
-        tvName.setText(user.getString(User.KEY_NAME));
-         Glide.with(getContext())
-                .load(listing.getImage().getUrl())
-                .into(ivListingPic); **/
+        tvName.setText(user.getName());
+        Glide.with(getContext())
+                .load(listing.getImages().get(0).getUrl())
+                .into(ivListingPic);
         tvDescription.setText(listing.getDescription());
         mvSellerLocation.onCreate(savedInstanceState);
         mvSellerLocation.getMapAsync(callback);
 
-        // Set onClickListeners
+        // Set onClickListeners for profile picture and name
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToProfileScreen(listing);
             }
         });
-
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +99,7 @@ public class DetailedListingFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             // Set the map coordinates to SF
+            // TODO: Update to make dynamic
             LatLng sf = new LatLng(37.484928, -122.148201);
             // Add a marker on the map coordinates
             googleMap.addMarker(new MarkerOptions().position(sf).title("Marker in SF"));
@@ -117,8 +115,8 @@ public class DetailedListingFragment extends Fragment {
 
     private void goToProfileScreen(Listing listing) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        //Fragment fragment = new ProfileFragment(listing.getAuthor());
-        //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        Fragment fragment = new ProfileFragment(listing.getAuthor());
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
     @Override
@@ -126,7 +124,6 @@ public class DetailedListingFragment extends Fragment {
         mvSellerLocation.onResume();
         super.onResume();
     }
-
 
     @Override
     public void onPause() {

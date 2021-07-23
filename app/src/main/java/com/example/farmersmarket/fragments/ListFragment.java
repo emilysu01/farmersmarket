@@ -4,15 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -35,7 +32,6 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,9 +39,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class ListFragment extends Fragment {
 
+    // Tag for logging statements
     public static final String TAG = "ListFragment";
 
-    // Result code for loading image (given arbitrarily)
+    // Result code for loading image (assigned arbitrarily)
     public static final int RESULT_LOAD_IMAGE = 1;
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
@@ -56,8 +53,10 @@ public class ListFragment extends Fragment {
     private EditText etDescription;
     private Button btnList;
 
-    File photoFile;
-    String photoFileName;
+    // TODO: Refactor to make these fields private
+    // Photo file information
+    public File photoFile;
+    public String photoFileName;
 
     // Required empty public constructor
     public ListFragment() {
@@ -136,7 +135,6 @@ public class ListFragment extends Fragment {
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
-
     }
 
     @Override
@@ -148,8 +146,6 @@ public class ListFragment extends Fragment {
             Bitmap selectedImage = Utils.loadFromUri(getContext(), photoUri);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            ParseFile tempPhotoFile = new ParseFile(byteArray);
 
             // Update UI with photo
             ivListingPic.setImageBitmap(selectedImage);
@@ -166,7 +162,8 @@ public class ListFragment extends Fragment {
     }
 
     private void saveListing(String description, ParseUser currentUser, File photoFile) {
-        // Set up new listing
+        // Create new listing
+        // TODO: Update with actual data
         Listing listing = new Listing();
         listing.setAuthor(new User(ParseUser.getCurrentUser()));
         listing.setDescription(description);
@@ -179,17 +176,14 @@ public class ListFragment extends Fragment {
         listing.setColors(colors);
         listing.setSellBy(new Date());
         listing.setDelivery(false);
-
-
-
         Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
-        // Bitmap selectedImage = Utils.loadFromUri(getContext(), picUri);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        ArrayList<ParseFile> arr = new ArrayList<ParseFile>();
-        arr.add(new ParseFile(byteArray));
-        listing.setImages(arr);
+        // TODO: Update to upload multiple pictures
+        ArrayList<ParseFile> imagesArray = new ArrayList<ParseFile>();
+        imagesArray.add(new ParseFile(byteArray));
+        listing.setImages(imagesArray);
 
         // Save new listing to database
         listing.saveInBackground(new SaveCallback() {
@@ -200,11 +194,11 @@ public class ListFragment extends Fragment {
                     Log.e(TAG, "Error while saving listing", e);
                 }
                 Log.i(TAG, "Listing made successfully!");
+
                 // Reset UI after saving
                 etDescription.setText("");
                 ivListingPic.setImageResource(0);
             }
         });
-        // Parse.enableLocalDatastore(getContext());
     }
 }

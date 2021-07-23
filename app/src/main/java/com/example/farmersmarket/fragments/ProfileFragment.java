@@ -1,13 +1,6 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
-import com.example.farmersmarket.ShortListingsAdapter;
+import com.example.farmersmarket.adapters.ShortListingsAdapter;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -32,26 +30,29 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
+    // Tag for logging statements
     public static final String TAG = "ProfileFragment";
 
-    ImageView ivProfilePic;
-    TextView tvName;
-    TextView tvUsername;
-    TextView tvLocation;
-    RecyclerView rvShortListings;
+    // UI components
+    private ImageView ivProfilePic;
+    private TextView tvName;
+    private TextView tvUsername;
+    private TextView tvLocation;
+    private RecyclerView rvShortListings;
 
+    // Listings data structure and adapter
     private List<Listing> allListings = new ArrayList<>();
     private ShortListingsAdapter adapter;
 
-    ParseUser user = ParseUser.getCurrentUser();
+    // Currently logged in ParseUser
+    private User user = new User(ParseUser.getCurrentUser());
 
     // Required empty public constructor
     public ProfileFragment() {
 
     }
 
-    // Required empty public constructor
-    public ProfileFragment(ParseUser user) {
+    public ProfileFragment(User user) {
         this.user = user;
     }
 
@@ -70,7 +71,6 @@ public class ProfileFragment extends Fragment {
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         tvName = view.findViewById(R.id.tvName);
         tvUsername = view.findViewById(R.id.tvUsername);
-        tvLocation = view.findViewById(R.id.tvLocation);
         rvShortListings = view.findViewById(R.id.rvShortListings);
 
         // Configure adapter
@@ -78,30 +78,27 @@ public class ProfileFragment extends Fragment {
         rvShortListings.setAdapter(adapter);
         rvShortListings.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        ParseFile profilePic = user.getParseFile(User.KEY_PROFILE_PIC);
+        // Display UI
+        ParseFile profilePic = user.getProfilePic();
         if (profilePic != null) {
             Glide.with(getContext())
                     .load(profilePic.getUrl())
                     .circleCrop()
                     .into(ivProfilePic);
         }
-        tvName.setText(user.getString(User.KEY_NAME));
-        tvUsername.setText(user.getString(User.KEY_USERNAME));
-        // tvLocation.setText(user.getString(User.KEY_LOCATION));
+        tvName.setText(user.getName());
+        tvUsername.setText(user.getUsername());
 
         // Retrieve listings from database
         queryListings(user);
     }
 
-    private void queryListings(ParseUser user) {
-        // Specify that we want to query Listing.class data
+    private void queryListings(User user) {
+        // Query database for listings made by the current user
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-        // Include data referred by user key
         query.include(Listing.KEY_AUTHOR);
-        // Order posts by newest first
         query.addDescendingOrder(Listing.KEY_CREATED_AT);
-        // Filter by current user
-        query.whereEqualTo(Listing.KEY_AUTHOR, user);
+        query.whereEqualTo(Listing.KEY_AUTHOR, user.userToParseUser());
 
         // Start an asynchronous call for listings
         query.findInBackground(new FindCallback<Listing>() {

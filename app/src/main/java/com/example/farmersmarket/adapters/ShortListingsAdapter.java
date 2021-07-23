@@ -1,4 +1,4 @@
-package com.example.farmersmarket;
+package com.example.farmersmarket.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,10 +13,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
-import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
-import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
@@ -66,10 +65,11 @@ public class ShortListingsAdapter extends RecyclerView.Adapter<ShortListingsAdap
         }
 
         public void bind(Listing listing) {
-            // Display UI components
-            /** Glide.with(context)
-                    .load(listing.getImage().getUrl())
-                    .into(ivPicture); **/
+            // Display UI
+            Glide.with(context)
+                    .load(listing.getImages().get(0).getUrl())
+                    .into(ivPicture);
+            // Set onClickListener
             ivPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -87,5 +87,4 @@ public class ShortListingsAdapter extends RecyclerView.Adapter<ShortListingsAdap
         Fragment fragment = new DetailedListingFragment(listing);
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
-
 }

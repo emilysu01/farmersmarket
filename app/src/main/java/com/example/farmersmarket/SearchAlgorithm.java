@@ -2,6 +2,7 @@ package com.example.farmersmarket;
 
 import android.util.Log;
 
+import com.example.farmersmarket.adapters.ShortListingsAdapter;
 import com.example.farmersmarket.models.Listing;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -13,7 +14,6 @@ import com.parse.ParseQuery;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

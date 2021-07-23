@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
-        Log.i(TAG, "Attempting to log in user " + username);
+        Log.i(TAG, "Attempting to log in user with username " + username);
 
         // Log in with Parse
         ParseUser.logInInBackground(username, password, new LogInCallback() {

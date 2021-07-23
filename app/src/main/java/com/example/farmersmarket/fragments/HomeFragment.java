@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.farmersmarket.ListingsAdapter;
+import com.example.farmersmarket.adapters.ListingsAdapter;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.models.Listing;
 import com.parse.FindCallback;
@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
     // UI components
     private RecyclerView rvListings;
 
+    // Listings data structure and adapter
     private List<Listing> allListings = new ArrayList<>();
     private ListingsAdapter adapter;
 
@@ -63,13 +64,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void queryListings() {
-        // Specify that we want to query Listing.class data
+        // Query database for listings
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
-        // Include data referred by user key
         query.include(Listing.KEY_AUTHOR);
-        // Order posts by newest first
         query.addDescendingOrder("createdAt");
-        // Start an asynchronous call for listings
         query.findInBackground(new FindCallback<Listing>() {
             @Override
             public void done(List<Listing> listings, ParseException e) {
@@ -79,23 +77,8 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                /*
-                ParseQuery<Image> query = ParseQuery.getQuery(Image.class);
-                query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        if (e == null) {
-                            // row of Object Id "Current USer"
-                        } else {
-                            // error
-                        }
-                    }
-                }); */
-
-
-                // Save received listings to data structure and notify adapter of new data
+                // Save received listings to listings data structure and notify adapter of new data
                 allListings.addAll(listings);
-                Log.i("HomeFragment", allListings.toString());
                 adapter.notifyDataSetChanged();
             }
         });

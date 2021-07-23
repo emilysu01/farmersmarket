@@ -1,4 +1,4 @@
-package com.example.farmersmarket;
+package com.example.farmersmarket.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +15,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
+import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
 
 import java.util.List;
@@ -24,7 +26,6 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
     private Context context;
     private List<Listing> listings;
-
     private FragmentManager fragmentManager;
 
     public ListingsAdapter(Context context, List<Listing> listings) {
@@ -45,7 +46,6 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ListingsAdapter.ViewHolder holder, int position) {
         // Find listing and bind it to the view
         Listing listing = listings.get(position);
-        Log.i("OnBindViewHolder", listing.toString());
         holder.bind(listing);
     }
 
@@ -72,11 +72,10 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-
         }
 
         public void bind(Listing listing) {
-            // Display UI components
+            // Display UI
             Glide.with(context)
                     .load(listing.getAuthor().getProfilePic().getUrl())
                     .circleCrop()
@@ -84,8 +83,6 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
             tvUsername.setText(listing.getAuthor().getUsername());
             tvName.setText(listing.getAuthor().getName());
             tvDescription.setText(listing.getDescription());
-            // Log.i("Error here? ", listing.getImages().toString());
-            Log.i("IMAGES", listing.getImages().toString());
             Glide.with(context)
                     .load(listing.getImages().get(0).getUrl())
                     .into(ivListingPic);
@@ -135,8 +132,8 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     }
 
     private void goToProfileScreen(Listing listing) {
-        // Fragment fragment = new ProfileFragment(listing.getAuthor());
-        //fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+        Fragment fragment = new ProfileFragment(listing.getAuthor());
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
     private void goToDetailedListingScreen(Listing listing) {

@@ -1,7 +1,6 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.SearchAlgorithm;
-import com.example.farmersmarket.ShortListingsAdapter;
+import com.example.farmersmarket.adapters.ShortListingsAdapter;
 import com.example.farmersmarket.models.Listing;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchFragment extends Fragment {
 
@@ -30,6 +28,7 @@ public class SearchFragment extends Fragment {
     private ImageButton btnSearch;
     private RecyclerView rvSearchResults;
 
+    // Listings data structure and adapter
     private static ArrayList<Listing> allListings = new ArrayList<>();
     private static ShortListingsAdapter adapter;
 
@@ -68,12 +67,10 @@ public class SearchFragment extends Fragment {
                     Toast.makeText(getContext(), "Search can't be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                search(searchStr);
+
+                // Search for listings using search algorithm
+                SearchAlgorithm.search(searchStr, allListings, adapter);
             }
         });
-    }
-
-    private void search(String search) {
-        SearchAlgorithm.search(search, allListings, adapter);
     }
 }
