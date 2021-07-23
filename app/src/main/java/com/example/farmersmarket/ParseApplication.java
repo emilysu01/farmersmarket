@@ -1,6 +1,7 @@
 package com.example.farmersmarket;
 
 import android.app.Application;
+import android.os.Build;
 
 import com.example.farmersmarket.models.Listing;
 import com.parse.Parse;
@@ -14,17 +15,15 @@ public class ParseApplication extends Application {
 
         // Register Listing class with Parse
         ParseObject.registerSubclass(Listing.class);
-        // ParseObject.registerSubclass(User.class);
 
         Parse.enableLocalDatastore(this);
 
         // TODO: Put API keys in separate doc
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("9yw3iEXVrqGQrwetAJSottc652q5vhytsWNeHdDv")
-                .clientKey("IUBzLc80uWiM1lAm4tp3AfbUZHRuKdgHy4Vz1afj")
+                .applicationId(BuildConfig.PARSE_APPLICATION_ID)
+                .clientKey(BuildConfig.PARSE_CLIENT_KEY)
                 .server("https://parseapi.back4app.com")
                 .build()
         );
-
     }
 }
