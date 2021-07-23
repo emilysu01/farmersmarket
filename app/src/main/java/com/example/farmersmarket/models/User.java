@@ -27,6 +27,7 @@ public class User {
     public static final String KEY_COORDINATES = "coordinates";
     public static final String KEY_ZIP = "zip";
 
+    // ParseUser field (there were issues with creating a class that extends ParseUser)
     private ParseUser parseUser;
 
     // Constructor given a ParseUser
@@ -53,6 +54,7 @@ public class User {
         }
     }
 
+    // Retrieve ParseUser
     public ParseUser userToParseUser() {
         return parseUser;
     }
@@ -62,20 +64,40 @@ public class User {
         return parseUser.getString(KEY_OBJECT_ID);
     }
 
+    public void setUserId(String userId) {
+        parseUser.put(KEY_OBJECT_ID, userId);
+    }
+
     public String getUsername() {
         return parseUser.getString(KEY_USERNAME);
+    }
+
+    public void setUsername(String username) {
+        parseUser.put(KEY_USERNAME, username);
     }
 
     public String getPassword() {
         return parseUser.getString(KEY_PASSWORD);
     }
 
+    public void setPassword(String password) {
+        parseUser.put(KEY_PASSWORD, password);
+    }
+
     public String getEmail() {
         return parseUser.getString(KEY_EMAIL);
     }
 
+    public void setEmail(String email) {
+        parseUser.put(KEY_EMAIL, email);
+    }
+
     public String getName() {
         return parseUser.getString(KEY_NAME);
+    }
+
+    public void setName(String name) {
+        parseUser.put(KEY_NAME, name);
     }
 
     public double[] getCoordinates() {
@@ -90,12 +112,31 @@ public class User {
         }
     }
 
+    public void setCoordinates(double[] coordinates) {
+        try {
+            JSONArray parseCoordinates = new JSONArray();
+            parseCoordinates.put(coordinates[0]);
+            parseCoordinates.put(coordinates[1]);
+            parseUser.put(KEY_COORDINATES, parseCoordinates);
+        } catch (JSONException e) {
+            Log.e(TAG, "JSONException", e);
+        }
+    }
+
     public String getZip() {
         return parseUser.getString(KEY_ZIP);
     }
 
+    public void setZip(String zip) {
+        parseUser.put(KEY_ZIP, zip);
+    }
+
     public ParseFile getProfilePic() {
         return parseUser.getParseFile(KEY_PROFILE_PIC);
+    }
+
+    public void setProfilePic(ParseFile profilePic) {
+        parseUser.put(KEY_PROFILE_PIC, profilePic);
     }
 
 }
