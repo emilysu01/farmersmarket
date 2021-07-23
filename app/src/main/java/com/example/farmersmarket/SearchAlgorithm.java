@@ -24,10 +24,8 @@ public class SearchAlgorithm {
     // Tag for logging statements
     public static final String TAG = "SearchAlgorithm";
 
+    // Search results data structure
     private static ArrayList<Listing> searchResults = new ArrayList<Listing>();
-
-    private static ArrayList<Listing> listings;
-    private static ShortListingsAdapter adapter;
 
     public static void search(String rawSearch, ArrayList<Listing> listings, ShortListingsAdapter adapter) {
         // Regularize input by making everything lowercase
@@ -61,7 +59,7 @@ public class SearchAlgorithm {
                         return;
                     }
 
-                    // Query the database for relevant listings
+                    // Query the database for relevant listings and update UI
                     queryListings(category, listings, adapter);
 
                 } catch (JSONException e) {
@@ -97,7 +95,7 @@ public class SearchAlgorithm {
             @Override
             public void done(List<Listing> listings, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
+                    Log.e(TAG, "Issue with retrieving listings from Parse", e);
                     return;
                 } else {
                     Log.i("Posts", listings.toString());
@@ -105,22 +103,8 @@ public class SearchAlgorithm {
 
                     allListings.addAll(listings);
                     adapter.notifyDataSetChanged();
-
-                    // Send data to update the UI
-                    // setSearchResults(allListings, adapter);
                 }
             }
         });
-    }
-
-    public static ArrayList<Listing> getSearchResults() {
-        return searchResults;
-    }
-
-    public static void setSearchResults(ArrayList<Listing> allListings, ShortListingsAdapter adapter) {
-        ArrayList<Listing> getSearchResults = SearchAlgorithm.getSearchResults();
-        allListings.addAll(getSearchResults);
-        adapter.notifyDataSetChanged();
-        Log.i("All Listings", allListings.toString());
     }
 }
