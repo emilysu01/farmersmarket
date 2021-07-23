@@ -3,6 +3,7 @@ package com.example.farmersmarket.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,15 +30,23 @@ import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,6 +64,7 @@ public class ListFragment extends Fragment {
     private Button btnTakePic;
     private ImageView ivListingPic;
     private EditText etDescription;
+    private Spinner spCategories;
     private Button btnList;
 
     // TODO: Refactor to make these fields private
@@ -78,7 +92,74 @@ public class ListFragment extends Fragment {
         btnTakePic = view.findViewById(R.id.btnTakePic);
         ivListingPic = view.findViewById(R.id.ivListingPic);
         etDescription = view.findViewById(R.id.etDescription);
+        spCategories = view.findViewById(R.id.spCategories);
         btnList = view.findViewById(R.id.btnList);
+
+        // Configure spinner
+        final String[] categorySelected = {""};
+        ArrayList<String> allCategories = new ArrayList<String>();
+        allCategories.add("Category");
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get("https://www.fruityvice.com/api/fruit/all", params, new TextHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String res) {
+                try {
+                    // Parse API call results to get all categories
+                    JSONArray rawJsonArray = new JSONArray(res);
+                    for (int i = 0; i < rawJsonArray.length(); i++) {
+                        String category = rawJsonArray.getJSONObject(i).getString("name").toLowerCase();
+                        allCategories.add(category);
+                    }
+                } catch (JSONException e) {
+                    Log.i(TAG, "Error with parsing Fruityvice data", e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                Log.i(TAG, "Error with retrieving Fruityvice data", t);
+            }
+        });
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, allCategories) {
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0) {
+                    // Disable the first item from spinner because first item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategories.setAdapter(spinnerAdapter);
+
+        spCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categorySelected[0] = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // Set onClickListeners
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +189,7 @@ public class ListFragment extends Fragment {
                 }
 
                 // Save listing to database
-                saveListing(description, ParseUser.getCurrentUser(), photoFile);
+                saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0]);
             }
         });
     }
@@ -161,7 +242,7 @@ public class ListFragment extends Fragment {
         }
     }
 
-    private void saveListing(String description, ParseUser currentUser, File photoFile) {
+    private void saveListing(String description, ParseUser currentUser, File photoFile, String category) {
         // Create new listing
         // TODO: Update with actual data
         Listing listing = new Listing();
@@ -170,7 +251,7 @@ public class ListFragment extends Fragment {
         listing.setCoordinates(new double[]{37.484928, -122.148201});
         listing.setPrice(10);
         listing.setUnits(1);
-        listing.setCategory("apple");
+        listing.setCategory(category);
         ArrayList<String> colors = new ArrayList<String>();
         colors.add("yellow");
         listing.setColors(colors);
