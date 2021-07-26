@@ -26,7 +26,8 @@ public class Listing extends ParseObject {
     public static final String KEY_AUTHOR = "author";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGES = "images";
-    public static final String KEY_COORDINATES = "coordinates";
+    public static final String KEY_LAT = "latitude";
+    public static final String KEY_LONG = "longitude";
     public static final String KEY_PRICE = "price";
     public static final String KEY_UNITS = "units";
     public static final String KEY_CATEGORY = "category";
@@ -79,27 +80,20 @@ public class Listing extends ParseObject {
         put(KEY_IMAGES, images);
     }
 
-    public double[] getCoordinates() {
-        try {
-            JSONArray rawCoordinates = getJSONArray(KEY_COORDINATES);
-            double latitude = rawCoordinates.getDouble(0);
-            double longitude = rawCoordinates.getDouble(1);
-            return new double[]{latitude, longitude};
-        } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
-            return new double[1];
-        }
+    public double getLatitude() {
+        return getDouble(KEY_LAT);
     }
 
-    public void setCoordinates(double[] coordinates) {
-        try {
-            JSONArray parseCoordinates = new JSONArray();
-            parseCoordinates.put(coordinates[0]);
-            parseCoordinates.put(coordinates[1]);
-            put(KEY_COORDINATES, parseCoordinates);
-        } catch (JSONException e) {
-            Log.e(TAG, "JSONException", e);
-        }
+    public void setLatitude(double latitude) {
+        put(KEY_LAT, latitude);
+    }
+
+    public double getLongitude() {
+        return getDouble(KEY_LONG);
+    }
+
+    public void setLongitude(double longitude) {
+        put(KEY_LONG, longitude);
     }
 
     public int getPrice() {
@@ -128,15 +122,15 @@ public class Listing extends ParseObject {
 
     public List<String> getColors() {
         try {
-            JSONArray rawColors = getJSONArray(KEY_COLORS);
+            JSONArray jsonColors = getJSONArray(KEY_COLORS);
             List<String> processedColors = new ArrayList<String>();
-            for (int i = 0; i < rawColors.length(); i += 1) {
-                processedColors.add(rawColors.getString(i));
+            for (int i = 0; i < jsonColors.length(); i += 1) {
+                processedColors.add(jsonColors.getString(i));
             }
             return processedColors;
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
-            return new ArrayList<String>();
+            Log.e(TAG, "JSON error with colors", e);
+            return null;
         }
     }
 

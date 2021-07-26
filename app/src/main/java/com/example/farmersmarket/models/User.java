@@ -3,14 +3,12 @@ package com.example.farmersmarket.models;
 import android.util.Log;
 
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.List;
+import java.util.Date;
 
 public class User {
 
@@ -19,15 +17,17 @@ public class User {
 
     // Database keys
     public static final String KEY_OBJECT_ID = "objectId";
+    public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
-    public static final String KEY_PROFILE_PIC = "profilePic";
     public static final String KEY_NAME = "name";
+    public static final String KEY_PROFILE_PIC = "profilePic";
     public static final String KEY_COORDINATES = "coordinates";
     public static final String KEY_ZIP = "zip";
 
-    // ParseUser field (there were issues with creating a class that extends ParseUser)
+    // ParseUser field
+    // There were issues with creating a class that directly extends ParseUser
     private ParseUser parseUser;
 
     // Constructor given a ParseUser
@@ -43,14 +43,14 @@ public class User {
             newUser.setPassword(password);
             newUser.setEmail(email);
             newUser.put(KEY_NAME, name);
-            JSONArray parseCoordinates = new JSONArray();
-            parseCoordinates.put(coordinates[0]);
-            parseCoordinates.put(coordinates[1]);
-            newUser.put(KEY_COORDINATES, parseCoordinates);
+            JSONArray jsonCoordinates = new JSONArray();
+            jsonCoordinates.put(coordinates[0]);
+            jsonCoordinates.put(coordinates[1]);
+            newUser.put(KEY_COORDINATES, jsonCoordinates);
             newUser.put(KEY_ZIP, zip);
             this.parseUser = newUser;
         } catch (JSONException e) {
-            Log.e(TAG, "JSONException", e);
+            Log.e(TAG, "JSON error with co-ordinates", e);
         }
     }
 
@@ -66,6 +66,14 @@ public class User {
 
     public void setUserId(String userId) {
         parseUser.put(KEY_OBJECT_ID, userId);
+    }
+
+    public Date getCreatedAt() {
+        return parseUser.getDate(KEY_CREATED_AT);
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        parseUser.put(KEY_CREATED_AT, createdAt);
     }
 
     public String getUsername() {
@@ -100,26 +108,34 @@ public class User {
         parseUser.put(KEY_NAME, name);
     }
 
+    public ParseFile getProfilePic() {
+        return parseUser.getParseFile(KEY_PROFILE_PIC);
+    }
+
+    public void setProfilePic(ParseFile profilePic) {
+        parseUser.put(KEY_PROFILE_PIC, profilePic);
+    }
+
     public double[] getCoordinates() {
         try {
-            JSONArray rawCoordinates = parseUser.getJSONArray(KEY_COORDINATES);
-            double latitude = rawCoordinates.getDouble(0);
-            double longitude = rawCoordinates.getDouble(1);
+            JSONArray jsonCoordinates = parseUser.getJSONArray(KEY_COORDINATES);
+            double latitude = jsonCoordinates.getDouble(0);
+            double longitude = jsonCoordinates.getDouble(1);
             return new double[]{latitude, longitude};
         } catch (JSONException e) {
-            Log.e(TAG, "JSON Exception", e);
-            return new double[1];
+            Log.e(TAG, "JSON error with co-ordinates", e);
+            return null;
         }
     }
 
     public void setCoordinates(double[] coordinates) {
         try {
-            JSONArray parseCoordinates = new JSONArray();
-            parseCoordinates.put(coordinates[0]);
-            parseCoordinates.put(coordinates[1]);
-            parseUser.put(KEY_COORDINATES, parseCoordinates);
+            JSONArray jsonCoordinates = new JSONArray();
+            jsonCoordinates.put(coordinates[0]);
+            jsonCoordinates.put(coordinates[1]);
+            parseUser.put(KEY_COORDINATES, jsonCoordinates);
         } catch (JSONException e) {
-            Log.e(TAG, "JSONException", e);
+            Log.e(TAG, "JSON error with co-ordinates", e);
         }
     }
 
@@ -130,13 +146,4 @@ public class User {
     public void setZip(String zip) {
         parseUser.put(KEY_ZIP, zip);
     }
-
-    public ParseFile getProfilePic() {
-        return parseUser.getParseFile(KEY_PROFILE_PIC);
-    }
-
-    public void setProfilePic(ParseFile profilePic) {
-        parseUser.put(KEY_PROFILE_PIC, profilePic);
-    }
-
 }

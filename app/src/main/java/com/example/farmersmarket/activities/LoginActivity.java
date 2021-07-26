@@ -1,7 +1,5 @@
 package com.example.farmersmarket.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.farmersmarket.R;
-import com.example.farmersmarket.models.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -49,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Move to sign up screen
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
+                goToSignUpActivity();
             }
         });
 
@@ -93,10 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                // Error checking
                 if (e != null) {
-                    Toast.makeText(LoginActivity.this, "Issue with login. Please try again.", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Issue with logging in", e);
+                    Toast.makeText(LoginActivity.this, "There was an issue with login. Please try again.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue with login", e);
                     return;
                 }
                 Toast.makeText(LoginActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
@@ -107,8 +104,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void goToSignUpActivity() {
+        Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+        startActivity(intent);
+    }
+
     private void goToMainActivity() {
-        // Move to main screen
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -291,7 +291,8 @@ public class ListFragment extends Fragment {
         Listing listing = new Listing();
         listing.setAuthor(new User(ParseUser.getCurrentUser()));
         listing.setDescription(description);
-        listing.setCoordinates(new double[]{coordinates.latitude, coordinates.longitude});
+        listing.setLatitude(coordinates.latitude);
+        listing.setLongitude(coordinates.longitude);
         listing.setPrice(10);
         listing.setUnits(1);
         listing.setCategory(category);
