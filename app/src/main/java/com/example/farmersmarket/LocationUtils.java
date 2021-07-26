@@ -42,7 +42,8 @@ public class LocationUtils {
         return true;
     }
 
-    public static LatLng getCoordinates(Context context) {
+    public static LatLng getCoordinates(Context context, Activity activity) {
+        checkAndRequestPermissions(context, activity);
         Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);

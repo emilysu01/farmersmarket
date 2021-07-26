@@ -45,6 +45,7 @@ public class ExploreFragment extends Fragment {
     // GoogleMap field
     private GoogleMap thisMap;
 
+    // Fragment manager for switching screens
     private FragmentManager fragmentManager;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -58,7 +59,6 @@ public class ExploreFragment extends Fragment {
                 public void onCameraChange(CameraPosition camera) {
                     if (camera.zoom != currentZoom){
                         currentZoom = camera.zoom;
-                        //here you will then check your markers
                         retrieveListings(googleMap);
                     }
                 }
@@ -69,15 +69,7 @@ public class ExploreFragment extends Fragment {
             googleMap.getUiSettings().setScrollGesturesEnabled(true);
             googleMap.getUiSettings().setRotateGesturesEnabled(true);
 
-            // Retrieve user's current location
-            LatLng currentLocation = LocationUtils.getCoordinates(getContext());
-
-            // Add a marker for the user's location
-            googleMap.addMarker(new MarkerOptions().position(currentLocation).title("Your current location"));
-            
-            // Move the camera to the map coordinates and zoom in closer
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-
+            // Make markers clickable
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
@@ -88,24 +80,16 @@ public class ExploreFragment extends Fragment {
                 }
             });
 
+            // Retrieve user's current location and set it on the map
+            LatLng currentLocation = LocationUtils.getCoordinates(getContext(), getActivity());
+            googleMap.addMarker(new MarkerOptions().position(currentLocation).title("Your current location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+
+            // Retrieve surrounding listings
             retrieveListings(googleMap);
         }
     };
 
-    private void retrieveListings(GoogleMap googleMap) {
-        // Determine the visible region of the map
-        Projection projection = googleMap.getProjection();
-        VisibleRegion visibleRegion = projection.getVisibleRegion();
-        LatLng sw = visibleRegion.latLngBounds.southwest;
-        LatLng ne = visibleRegion.latLngBounds.northeast;
-        double left = sw.longitude;
-        double bottom = sw.latitude;
-        double right = ne.longitude;
-        double top = ne.latitude;
-
-        // Find listings on the visible region of the map
-        queryListings(left, right, top, bottom);
-    }
     // Required empty public constructor
     public ExploreFragment() {
 
@@ -131,6 +115,21 @@ public class ExploreFragment extends Fragment {
 
         // Set fragment manager
         fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+    }
+
+    private void retrieveListings(GoogleMap googleMap) {
+        // Determine the visible region of the map
+        Projection projection = googleMap.getProjection();
+        VisibleRegion visibleRegion = projection.getVisibleRegion();
+        LatLng sw = visibleRegion.latLngBounds.southwest;
+        LatLng ne = visibleRegion.latLngBounds.northeast;
+        double left = sw.longitude;
+        double bottom = sw.latitude;
+        double right = ne.longitude;
+        double top = ne.latitude;
+
+        // Find listings on the visible region of the map
+        queryListings(left, right, top, bottom);
     }
 
     private void queryListings(double left, double right, double top, double bottom) {

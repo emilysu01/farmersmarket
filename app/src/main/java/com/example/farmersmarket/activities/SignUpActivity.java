@@ -196,7 +196,7 @@ public class SignUpActivity extends AppCompatActivity {
             LocationUtils.checkAndRequestPermissions(this, SignUpActivity.this);
 
             // Retrieve location
-            LatLng location = LocationUtils.getCoordinates(this);
+            LatLng location = LocationUtils.getCoordinates(this, SignUpActivity.this);
             double[] arrCoordinates = new double[]{location.latitude, location.longitude};
             return arrCoordinates;
         } catch (Exception e) {
