@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +15,7 @@ import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.ExploreFragment;
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
+import com.example.farmersmarket.fragments.MessageFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (clicked == R.id.action_list) {
                     fragment = new ListFragment();
                 } else {
-                    fragment = new ProfileFragment();
+                    fragment = new MessageFragment();
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.miProfile) {
+            fragmentManager.beginTransaction().replace(R.id.flContainer, new ProfileFragment()).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);

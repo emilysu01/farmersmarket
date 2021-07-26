@@ -23,8 +23,8 @@
         android:title="List"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile"
+        android:id="@+id/action_message"
+        android:icon="@drawable/ic_message"
+        android:title="Message"
         app:showAsAction="always" />
 </menu>

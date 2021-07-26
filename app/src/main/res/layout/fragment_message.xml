@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="5dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="10dp">
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ibSend"
+            android:layout_toLeftOf="@+id/ibSend"
+            android:gravity="top"
+            android:hint="Enter your message here"
+            android:imeOptions="actionSend"
+            android:inputType="textShortMessage" />
+
+        <ImageButton
+            android:id="@+id/ibSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="Send"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_send"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</RelativeLayout>
