@@ -2,6 +2,7 @@ package com.example.farmersmarket.models;
 
 import android.util.Log;
 
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -101,7 +102,13 @@ public class User {
     }
 
     public String getName() {
-        return parseUser.getString(KEY_NAME);
+        // return parseUser.getString(KEY_NAME);
+        try {
+            return parseUser.fetchIfNeeded().getString(KEY_NAME);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public void setName(String name) {
