@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -47,7 +49,7 @@ public class LocationUtils {
         Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);
-        Location location = locationManager.getLastKnownLocation(provider);
+        Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 }

@@ -130,7 +130,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e(TAG, "Error with checking duplicate username");
                     duplicates[0] = true;
                 }
-                if (objects.isEmpty()) {
+                if (!objects.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "An account with this username already exists", Toast.LENGTH_SHORT).show();
                     duplicates[0] = true;
                 }
@@ -148,7 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e(TAG, "Error with checking duplicate email");
                     duplicates[1] = true;
                 }
-                if (objects.isEmpty()) {
+                if (!objects.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "An account with this email already exists", Toast.LENGTH_SHORT).show();
                     duplicates[1] = true;
                 }

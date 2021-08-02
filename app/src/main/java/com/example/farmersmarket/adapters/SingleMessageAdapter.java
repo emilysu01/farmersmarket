@@ -14,11 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.models.Message;
-import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
+public class SingleMessageAdapter extends RecyclerView.Adapter<SingleMessageAdapter.MessageViewHolder> {
 
     public static final String TAG = "ChatAdapter";
 
@@ -29,7 +28,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     private Context context;
     private String userId;
 
-    public ChatAdapter(Context context, String userId, List<Message> messages) {
+    public SingleMessageAdapter(Context context, String userId, List<Message> messages) {
         this.allMessages = messages;
         this.context = context;
         this.userId = userId;
@@ -52,7 +51,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatAdapter.MessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SingleMessageAdapter.MessageViewHolder holder, int position) {
         Message message = allMessages.get(position);
         holder.bindMessage(message);
     }
@@ -96,7 +95,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         @Override
         void bindMessage(Message message) {
             Glide.with(context)
-                    .load(message.getParseUser(Message.KEY_SENDER).getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                    .load(message.getSender().getProfilePic().getUrl())
                     .circleCrop()
                     .into(ivOtherProfilePic);
             tvBody.setText(message.getMessage());
@@ -120,10 +119,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         void bindMessage(Message message) {
             Log.i(TAG, "OUTGOING MESSAGE");
             Log.i("SENDER", message.getSender().toString());
-            /* Glide.with(context)
-                    .load(message.getParseUser(Message.KEY_SENDER).getParseFile(User.KEY_PROFILE_PIC).getUrl())
+            Glide.with(context)
+                    .load(message.getSender().getProfilePic().getUrl())
                     .circleCrop()
-                    .into(ivMyProfilePic); */
+                    .into(ivMyProfilePic);
             tvBody.setText(message.getMessage());
             Log.i(TAG,message.getSender().getName());
             // tvName.setText(message.getSender().getName());

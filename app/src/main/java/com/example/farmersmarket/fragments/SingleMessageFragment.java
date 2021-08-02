@@ -17,12 +17,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.farmersmarket.R;
-import com.example.farmersmarket.adapters.ChatAdapter;
+import com.example.farmersmarket.adapters.SingleMessageAdapter;
+import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.Message;
-import com.example.farmersmarket.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -33,7 +32,7 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public class MessageFragment extends Fragment {
+public class SingleMessageFragment extends Fragment {
 
     // Tag for logging statements
     public static final String TAG = "MessageFragment";
@@ -48,11 +47,17 @@ public class MessageFragment extends Fragment {
     // Adapter components
     private ArrayList<Message> allMessages;
     private boolean firstLoad;
-    private ChatAdapter adapter;
+    private SingleMessageAdapter adapter;
+
+    private Message thisMessage;
 
     // Required empty public constructor
-    public MessageFragment() {
+    public SingleMessageFragment() {
 
+    }
+
+    public SingleMessageFragment(Message message) {
+        this.thisMessage = message;
     }
 
     @Override
@@ -100,7 +105,7 @@ public class MessageFragment extends Fragment {
         // Configure adapter
         allMessages = new ArrayList<Message>();
         firstLoad = true;
-        adapter = new ChatAdapter(getActivity(), ParseUser.getCurrentUser().getObjectId(), allMessages);
+        adapter = new SingleMessageAdapter(getActivity(), ParseUser.getCurrentUser().getObjectId(), allMessages);
         rvMessages.setAdapter(adapter);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvMessages.setLayoutManager(linearLayoutManager);
@@ -132,6 +137,7 @@ public class MessageFragment extends Fragment {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_RECIPIENT);
+        query.whereEqualTo(Message.KEY_SENDER, thisMessage.getSender().userToParseUser());
         query.setLimit(MAX_MESSAGES_TO_SHOW);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Message>() {
