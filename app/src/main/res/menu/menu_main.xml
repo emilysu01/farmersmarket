@@ -6,6 +6,9 @@
         android:id="@+id/miProfile"
         android:title="Profile" />
     <item
+        android:id="@+id/miBasket"
+        android:title="Basket" />
+    <item
         android:id="@+id/miLogOut"
         android:title="Log Out"
         app:showAsAction="never" />

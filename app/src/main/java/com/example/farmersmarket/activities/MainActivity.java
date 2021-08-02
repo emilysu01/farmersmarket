@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.AllMessagesFragment;
+import com.example.farmersmarket.fragments.BasketFragment;
 import com.example.farmersmarket.fragments.ExploreFragment;
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.miProfile) {
             fragmentManager.beginTransaction().replace(R.id.flContainer, new ProfileFragment()).commit();
+            return true;
+        } else if (item.getItemId() == R.id.miBasket) {
+            fragmentManager.beginTransaction().replace(R.id.flContainer, new BasketFragment()).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
