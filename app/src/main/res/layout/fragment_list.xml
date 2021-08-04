@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ListFragment">
@@ -28,48 +31,295 @@
 
     <ImageView
         android:id="@+id/ivListingPic"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/btnTakePic"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="14dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="156dp"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tvDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivListingPic"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/tvCategoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDescription"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Category" />
+
+    <TextView
+        android:id="@+id/tvPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spCategories"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Price" />
+
+    <TextView
+        android:id="@+id/tvUnitsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spCategories"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/tvPriceLabel"
+        android:text="Units Available" />
+
+    <TextView
+        android:id="@+id/tvSellByLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPrice"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Sell By" />
+
+    <TextView
+        android:id="@+id/tvColorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSellBy"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Colors" />
+
+    <TextView
+        android:id="@+id/tvDeliveryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPrice"
+        android:layout_marginStart="145dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/tvSellByLabel"
+        android:text="Delivery?" />
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/ivListingPic"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvDescriptionLabel"
         android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/rounded_corner"
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"
-        android:maxLines="5" />
+        android:maxLines="5"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <Spinner
+        android:id="@+id/spCategories"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvCategoryLabel"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/rounded_corner"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <Spinner
+        android:id="@+id/spDelivery"
+        android:layout_width="185dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvSellByLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/etSellBy"
+        android:background="@drawable/rounded_corner"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="185dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvPriceLabel"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:hint="Price"
+        android:inputType="number"
+        android:maxLines="5"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <EditText
+        android:id="@+id/etUnits"
+        android:layout_width="185dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvPriceLabel"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/etPrice"
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:hint="Units"
+        android:inputType="number"
+        android:maxLines="5"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <EditText
+        android:id="@+id/etSellBy"
+        android:layout_width="185dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvSellByLabel"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:inputType="date"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
 
     <Button
         android:id="@+id/btnList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spCategories"
+        android:layout_below="@+id/ibBlue"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
         android:text="List" />
 
-    <Spinner
-        android:id="@+id/spCategories"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/etDescription"
+    <ImageButton
+        android:id="@+id/ibRed"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp" />
+        android:background='@drawable/red_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibOrange"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibRed"
+        android:background='@drawable/orange_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibYellow"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibOrange"
+        android:background='@drawable/yellow_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibGreen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibYellow"
+        android:background='@drawable/green_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibBlue"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibGreen"
+        android:background='@drawable/blue_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibPurple"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibBlue"
+        android:background='@drawable/purple_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibWhite"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibPurple"
+        android:background='@drawable/white_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibBrown"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibWhite"
+        android:background='@drawable/brown_button'
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/ibBlack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvColorLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="22dp"
+        android:layout_toEndOf="@+id/ibBrown"
+        android:background='@drawable/black_button'
+        tools:src="@tools:sample/avatars" />
 
 </RelativeLayout>
+</ScrollView>
