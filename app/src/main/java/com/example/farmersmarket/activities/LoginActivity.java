@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -22,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
 
     // UI components
+    private ImageView ivLogo;
     private EditText etUsername;
     private EditText etPassword;
     private TextView tvSignUp;
@@ -38,12 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Retrieve UI components
+        ivLogo = findViewById(R.id.ivLogo);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         tvSignUp = findViewById(R.id.tvSignUp);
         btnLogin = findViewById(R.id.btnLogin);
 
-        // Set onClickListeners for sign up link
+        // Set logo
+        Glide.with(this)
+                .load(getResources().getDrawable(R.drawable.ic_basket))
+                .into(ivLogo);
+
+        // Set onClickListener for sign up link
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Set onClickListeners for login button
+        // Set onClickListener for login button
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToSignUpActivity() {
-        Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 

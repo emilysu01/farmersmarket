@@ -1,14 +1,14 @@
 package com.example.farmersmarket.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.AllMessagesFragment;
@@ -16,7 +16,6 @@ import com.example.farmersmarket.fragments.BasketFragment;
 import com.example.farmersmarket.fragments.ExploreFragment;
 import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
-import com.example.farmersmarket.fragments.SingleMessageFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // Log out
         if (item.getItemId() == R.id.miLogOut) {
             ParseUser.logOut();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
             return true;

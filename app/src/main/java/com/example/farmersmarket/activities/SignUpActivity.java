@@ -1,11 +1,6 @@
 package com.example.farmersmarket.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.farmersmarket.LocationUtils;
 import com.example.farmersmarket.R;
@@ -24,12 +17,10 @@ import com.example.farmersmarket.models.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -120,43 +111,46 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Check for duplicate usernames and emails
-        boolean[] duplicates = new boolean[2];
-        ParseQuery<ParseObject> usernameQuery = ParseQuery.getQuery("User");
+        final boolean[] duplicateUsername = new boolean[1];
+        ParseQuery<ParseUser> usernameQuery = ParseQuery.getQuery("User");
         usernameQuery.whereEqualTo(User.KEY_USERNAME, username);
-        usernameQuery.findInBackground(new FindCallback<ParseObject>() {
+        usernameQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(List<ParseUser> objects, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error with checking duplicate username");
-                    duplicates[0] = true;
+                    duplicateUsername[0] = true;
                 }
                 if (!objects.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "An account with this username already exists", Toast.LENGTH_SHORT).show();
-                    duplicates[0] = true;
+                    duplicateUsername[0] = true;
                 }
             }
         });
-        if (duplicates[0]) {
+        if (duplicateUsername[0]) {
             return false;
         }
-        ParseQuery<ParseObject> emailQuery = ParseQuery.getQuery("User");
+
+        final boolean[] duplicateEmail = new boolean[1];
+        ParseQuery<ParseUser> emailQuery = ParseQuery.getQuery("User");
         emailQuery.whereEqualTo(User.KEY_EMAIL, email);
-        emailQuery.findInBackground(new FindCallback<ParseObject>() {
+        emailQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(List<ParseUser> objects, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error with checking duplicate email");
-                    duplicates[1] = true;
+                    Log.e(TAG, "Error with checking duplicate username");
+                    duplicateEmail[0] = true;
                 }
                 if (!objects.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "An account with this email already exists", Toast.LENGTH_SHORT).show();
-                    duplicates[1] = true;
+                    duplicateEmail[0] = true;
                 }
             }
         });
-        if (duplicates[1]) {
+        if (duplicateEmail[0]) {
             return false;
         }
+
         return true;
     }
 
@@ -166,12 +160,18 @@ public class SignUpActivity extends AppCompatActivity {
         // Retrieve the user's current location
         double[] coordinates = getCoordinates();
         if (coordinates == null) {
+            Log.e(TAG, "Error with retrieving user's location for sign up");
             return;
         }
 
         // Create new user
-        User newUser = new User(username, password, email, firstName + " " + lastName, coordinates, zip);
-        ParseUser newParseUser = newUser.userToParseUser();
+        ParseUser newParseUser = new ParseUser();
+        newParseUser.put(User.KEY_USERNAME, username);
+        newParseUser.put(User.KEY_PASSWORD, password);
+        newParseUser.put(User.KEY_EMAIL, email);
+        newParseUser.put(User.KEY_NAME, firstName + " " + lastName);
+        newParseUser.put(User.KEY_COORDINATES, coordinates);
+        newParseUser.put(User.KEY_ZIP, zip);
 
         // Sign up with Parse
         newParseUser.signUpInBackground(new SignUpCallback() {
@@ -182,6 +182,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with sign up ", e);
                     return;
                 }
+
                 Toast.makeText(SignUpActivity.this, "Successfully signed up!", Toast.LENGTH_SHORT).show();;
 
                 // Move to main screen
@@ -192,7 +193,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private double[] getCoordinates() {
         try {
-            // Checks for permission
+            // Check for permission
             LocationUtils.checkAndRequestPermissions(this, SignUpActivity.this);
 
             // Retrieve location
@@ -200,14 +201,14 @@ public class SignUpActivity extends AppCompatActivity {
             double[] arrCoordinates = new double[]{location.latitude, location.longitude};
             return arrCoordinates;
         } catch (Exception e) {
-            Toast.makeText(this, "There was an issue retrieving your location. Please try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "There was an issue with retrieving your location. Please try again.", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Error with retrieving location", e);
             return null;
         }
     }
 
     private void goToLoginActivity() {
-        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
