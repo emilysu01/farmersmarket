@@ -26,6 +26,7 @@ public class User {
     public static final String KEY_PROFILE_PIC = "profilePic";
     public static final String KEY_COORDINATES = "coordinates";
     public static final String KEY_ZIP = "zip";
+    public static final String KEY_BASKET = "basket";
 
     // ParseUser field
     // There were issues with creating a class that directly extends ParseUser

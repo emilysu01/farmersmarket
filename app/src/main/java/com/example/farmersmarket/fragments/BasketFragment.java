@@ -29,17 +29,18 @@ import java.util.List;
 
 public class BasketFragment extends Fragment {
 
+    // Tag for logging statements
     public static final String TAG = "BasketFragment";
-    // public ArrayList<Listing> basket;
 
+    // Listings data structure and adapter
     private List<Listing> basketListings = new ArrayList<Listing>();
     private BasketAdapter adapter;
 
+    // UI components
     private RecyclerView rvBasket;
 
     // Required empty public constructor
     public BasketFragment() {
-
     }
 
     @Override
@@ -61,9 +62,14 @@ public class BasketFragment extends Fragment {
         rvBasket.setAdapter(adapter);
         rvBasket.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Retrieve basket listings
+        retrieveBasket();
+    }
+
+    private void retrieveBasket() {
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-        query.include("basket");
-        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+        query.include(User.KEY_BASKET);
+        query.whereEqualTo(User.KEY_OBJECT_ID, ParseUser.getCurrentUser().getObjectId());
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> users, ParseException e) {
@@ -73,7 +79,7 @@ public class BasketFragment extends Fragment {
                     return;
                 }
 
-                basketListings.addAll(users.get(0).getList("basket"));
+                basketListings.addAll(users.get(0).getList(User.KEY_BASKET));
                 adapter.notifyDataSetChanged();
             }
         });

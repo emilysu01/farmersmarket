@@ -3,6 +3,7 @@ package com.example.farmersmarket.models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -36,20 +37,6 @@ public class Listing extends ParseObject {
     public static final String KEY_DELIVERY = "delivery";
 
     // Getters and setters
-    @Override
-    public String getObjectId() {
-        return getString(KEY_OBJECT_ID);
-    }
-
-    @Override
-    public void setObjectId(String objectId) {
-        put(KEY_OBJECT_ID, objectId);
-    }
-
-    @Override
-    public Date getCreatedAt() {
-        return getDate(KEY_CREATED_AT);
-    }
 
     public void setCreatedAt(Date createdAt) {
         put(KEY_CREATED_AT, createdAt);

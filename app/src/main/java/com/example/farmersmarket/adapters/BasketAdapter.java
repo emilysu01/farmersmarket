@@ -19,6 +19,7 @@ import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
+import com.parse.ParseException;
 
 import java.util.List;
 
@@ -76,15 +77,18 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         }
 
         public void bind(Listing listing) {
-            Log.i("LITING", listing.toString());
             // Display UI
-            Glide.with(context)
-                    .load(listing.getImages().get(0).getUrl())
-                    .into(ivListingImage);
-            tvListingTitle.setText(listing.getDescription());
-            tvUsername.setText(listing.getParseUser(Listing.KEY_AUTHOR).getString(User.KEY_USERNAME));
-            tvName.setText(listing.getParseUser(Listing.KEY_AUTHOR).getString(User.KEY_NAME));
-            tvDescription.setText(listing.getDescription());
+            try {
+                Glide.with(context)
+                        .load(listing.getImages().get(0).getUrl())
+                        .into(ivListingImage);
+                tvListingTitle.setText(listing.getDescription());
+                tvUsername.setText(listing.getParseUser(Listing.KEY_AUTHOR).fetchIfNeeded().getString(User.KEY_USERNAME));
+                tvName.setText(listing.getParseUser(Listing.KEY_AUTHOR).fetchIfNeeded().getString(User.KEY_NAME));
+                tvDescription.setText(listing.getDescription());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
 
             // Set onClickListener
