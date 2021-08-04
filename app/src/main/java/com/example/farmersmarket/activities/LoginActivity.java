@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +49,10 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp = findViewById(R.id.tvSignUp);
         btnLogin = findViewById(R.id.btnLogin);
 
+        // Set up animations
+        final Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_button);
+        final Animation textAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_text);
+
         // Set logo
         Glide.with(this)
                 .load(getResources().getDrawable(R.drawable.ic_basket))
@@ -56,6 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Bounce animation
+                tvSignUp.startAnimation(textAnimation);
+
                 // Move to sign up screen
                 goToSignUpActivity();
             }
@@ -65,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Bounce animation
+                btnLogin.startAnimation(buttonAnimation);
+
                 // Retrieve typed text
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();

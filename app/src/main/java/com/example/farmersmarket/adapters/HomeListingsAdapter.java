@@ -18,18 +18,24 @@ import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.models.Listing;
+import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
-public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHolder> {
+public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapter.ViewHolder> {
 
+    // Context (passed in from constructor)
     private Context context;
-    private List<Listing> listings;
+
+    // Listings data structure
+    private List<Listing> allListings;
+
+    // Fragment manager for navigating to detailed listing pages
     private FragmentManager fragmentManager;
 
-    public ListingsAdapter(Context context, List<Listing> listings) {
+    public HomeListingsAdapter(Context context, List<Listing> listings) {
         this.context = context;
-        this.listings = listings;
+        this.allListings = listings;
         fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
     }
 
@@ -37,20 +43,20 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate view and attach it to a ViewHolder
-        View view = LayoutInflater.from(context).inflate(R.layout.item_listing, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_home_listing, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListingsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeListingsAdapter.ViewHolder holder, int position) {
         // Find listing and bind it to the view
-        Listing listing = listings.get(position);
+        Listing listing = allListings.get(position);
         holder.bind(listing);
     }
 
     @Override
     public int getItemCount() {
-        return listings.size();
+        return allListings.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -67,7 +73,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
 
             // Retrieve UI components
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvUsername = itemView.findViewById(R.id.tvName);
+            tvUsername = itemView.findViewById(R.id.tvUsername);
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
@@ -76,11 +82,11 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
         public void bind(Listing listing) {
             // Display UI
             Glide.with(context)
-                    .load(listing.getAuthor().getProfilePic().getUrl())
+                    .load(listing.getAuthor().getParseFile(User.KEY_PROFILE_PIC).getUrl())
                     .circleCrop()
                     .into(ivProfilePic);
-            tvUsername.setText(listing.getAuthor().getUsername());
-            tvName.setText(listing.getAuthor().getName());
+            tvUsername.setText("@" + listing.getAuthor().getString(User.KEY_USERNAME));
+            tvName.setText(listing.getAuthor().getString(User.KEY_NAME));
             tvDescription.setText(listing.getDescription());
             Glide.with(context)
                     .load(listing.getImages().get(0).getUrl())
@@ -92,7 +98,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Listing listing = listings.get(position);
+                        Listing listing = allListings.get(position);
                         goToProfileScreen(listing);
                     }
                 }
@@ -102,7 +108,17 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Listing listing = listings.get(position);
+                        Listing listing = allListings.get(position);
+                        goToProfileScreen(listing);
+                    }
+                }
+            });
+            tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = allListings.get(position);
                         goToProfileScreen(listing);
                     }
                 }
@@ -112,7 +128,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Listing listing = listings.get(position);
+                        Listing listing = allListings.get(position);
                         goToDetailedListingScreen(listing);
                     }
                 }
@@ -122,7 +138,7 @@ public class ListingsAdapter extends RecyclerView.Adapter<ListingsAdapter.ViewHo
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        Listing listing = listings.get(position);
+                        Listing listing = allListings.get(position);
                         goToDetailedListingScreen(listing);
                     }
                 }

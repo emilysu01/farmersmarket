@@ -1,6 +1,10 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,13 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.farmersmarket.adapters.ListingsAdapter;
 import com.example.farmersmarket.R;
+import com.example.farmersmarket.adapters.HomeListingsAdapter;
 import com.example.farmersmarket.models.Listing;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -33,11 +32,10 @@ public class HomeFragment extends Fragment {
 
     // Listings data structure and adapter
     private List<Listing> allListings = new ArrayList<>();
-    private ListingsAdapter adapter;
+    private HomeListingsAdapter adapter;
 
     // Required empty public constructor
     public HomeFragment() {
-
     }
 
     @Override
@@ -54,7 +52,7 @@ public class HomeFragment extends Fragment {
         rvListings = view.findViewById(R.id.rvListings);
 
         // Configure adapter
-        adapter = new ListingsAdapter(getContext(), allListings);
+        adapter = new HomeListingsAdapter(getContext(), allListings);
         rvListings.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvListings.setLayoutManager(linearLayoutManager);
@@ -71,7 +69,6 @@ public class HomeFragment extends Fragment {
         query.findInBackground(new FindCallback<Listing>() {
             @Override
             public void done(List<Listing> listings, ParseException e) {
-                // Check for errors
                 if (e != null) {
                     Log.e(TAG, "Issue with getting posts", e);
                     return;

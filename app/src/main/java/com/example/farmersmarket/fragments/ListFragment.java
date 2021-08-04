@@ -289,7 +289,7 @@ public class ListFragment extends Fragment {
         // Create new listing
         // TODO: Update with actual data
         Listing listing = new Listing();
-        listing.setAuthor(new User(ParseUser.getCurrentUser()));
+        listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
         listing.setLatitude(coordinates.latitude);
         listing.setLongitude(coordinates.longitude);

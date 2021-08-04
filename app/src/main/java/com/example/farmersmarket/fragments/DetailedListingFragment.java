@@ -23,6 +23,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseUser;
 
 public class DetailedListingFragment extends Fragment {
 
@@ -66,12 +67,12 @@ public class DetailedListingFragment extends Fragment {
         mvSellerLocation = view.findViewById(R.id.mvSellerLocation);
 
         // Display UI
-        User user = listing.getAuthor();
+        ParseUser user = listing.getAuthor();
         Glide.with(getContext())
-                .load(user.getProfilePic().getUrl())
+                .load(user.getParseFile(User.KEY_PROFILE_PIC).getUrl())
                 .circleCrop()
                 .into(ivProfilePic);
-        tvName.setText(user.getName());
+        tvName.setText(user.getString(User.KEY_NAME));
         Glide.with(getContext())
                 .load(listing.getImages().get(0).getUrl())
                 .into(ivListingPic);

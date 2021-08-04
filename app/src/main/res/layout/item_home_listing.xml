@@ -11,8 +11,9 @@
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -23,18 +24,34 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="35dp"
         android:layout_toEndOf="@+id/ivProfilePic"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Emily Su" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:layout_toEndOf="@+id/tvName"
+        android:textColor="#808080"
+        android:textSize="18sp"
         android:textStyle="bold"
         tools:text="@emilysu01" />
 
     <ImageView
         android:id="@+id/ivListingPic"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_below="@+id/ivProfilePic"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="0dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
@@ -44,10 +61,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivListingPic"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="15dp"
         android:maxLines="3"
+        android:textSize="16sp"
         tools:text="Hi! I'm selling apples grown on my tree. $5 for 5 apples. Pick up in Berkeley only." />
 </RelativeLayout>

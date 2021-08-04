@@ -55,13 +55,12 @@ public class Listing extends ParseObject {
         put(KEY_CREATED_AT, createdAt);
     }
 
-    public User getAuthor() {
-        ParseUser parseUser = getParseUser(KEY_AUTHOR);
-        return new User(parseUser);
+    public ParseUser getAuthor() {
+        return getParseUser(KEY_AUTHOR);
     }
 
-    public void setAuthor(User author) {
-        put(KEY_AUTHOR, author.userToParseUser());
+    public void setAuthor(ParseUser author) {
+        put(KEY_AUTHOR, author);
     }
 
     public String getDescription() {

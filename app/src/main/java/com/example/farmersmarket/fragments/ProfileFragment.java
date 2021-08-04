@@ -45,14 +45,14 @@ public class ProfileFragment extends Fragment {
     private ShortListingsAdapter adapter;
 
     // Currently logged in ParseUser
-    private User user = new User(ParseUser.getCurrentUser());
+    private ParseUser user = ParseUser.getCurrentUser();
 
     // Required empty public constructor
     public ProfileFragment() {
 
     }
 
-    public ProfileFragment(User user) {
+    public ProfileFragment(ParseUser user) {
         this.user = user;
     }
 
@@ -79,26 +79,26 @@ public class ProfileFragment extends Fragment {
         rvShortListings.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         // Display UI
-        ParseFile profilePic = user.getProfilePic();
+        ParseFile profilePic = user.getParseFile(User.KEY_PROFILE_PIC);
         if (profilePic != null) {
             Glide.with(getContext())
                     .load(profilePic.getUrl())
                     .circleCrop()
                     .into(ivProfilePic);
         }
-        tvName.setText(user.getName());
+        tvName.setText(user.getString(User.KEY_PROFILE_PIC));
         tvUsername.setText(user.getUsername());
 
         // Retrieve listings from database
         queryListings(user);
     }
 
-    private void queryListings(User user) {
+    private void queryListings(ParseUser user) {
         // Query database for listings made by the current user
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
         query.include(Listing.KEY_AUTHOR);
         query.addDescendingOrder(Listing.KEY_CREATED_AT);
-        query.whereEqualTo(Listing.KEY_AUTHOR, user.userToParseUser());
+        query.whereEqualTo(Listing.KEY_AUTHOR, user);
 
         // Start an asynchronous call for listings
         query.findInBackground(new FindCallback<Listing>() {

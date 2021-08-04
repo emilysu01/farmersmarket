@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -54,10 +56,17 @@ public class SignUpActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tvLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
 
+        // Set up animations
+        final Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_button);
+        final Animation textAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_text);
+
         // Set onClickListener for login link
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Bounce animation
+                tvLogin.startAnimation(textAnimation);
+
                 // Move to login screen
                 goToLoginActivity();
             }
@@ -67,6 +76,9 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Bounce animation
+                btnSignUp.startAnimation(buttonAnimation);
+
                 // Retrieve typed text
                 String firstName = etFirstName.getText().toString();
                 String lastName = etLastName.getText().toString();
