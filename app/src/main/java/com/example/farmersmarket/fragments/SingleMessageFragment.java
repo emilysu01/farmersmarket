@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.adapters.SingleMessageAdapter;
+import com.example.farmersmarket.models.Conversation;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.Message;
 import com.parse.FindCallback;
@@ -49,15 +50,15 @@ public class SingleMessageFragment extends Fragment {
     private boolean firstLoad;
     private SingleMessageAdapter adapter;
 
-    private Message thisMessage;
+    private Conversation thisConvo;
 
     // Required empty public constructor
     public SingleMessageFragment() {
 
     }
 
-    public SingleMessageFragment(Message message) {
-        this.thisMessage = message;
+    public SingleMessageFragment(Conversation conversation) {
+        this.thisConvo = conversation;
     }
 
     @Override
@@ -78,6 +79,8 @@ public class SingleMessageFragment extends Fragment {
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         // any network interceptors must be added with the Configuration Builder given this syntax
         builder.networkInterceptors().add(httpLoggingInterceptor);
+
+        refreshMessages();
 
         // Retrieve UI components
         rvMessages = view.findViewById(R.id.rvMessages);
@@ -127,6 +130,16 @@ public class SingleMessageFragment extends Fragment {
                 }
                 Log.i(TAG, "Message sent successfully!");
 
+                thisConvo.setLatestMessage(parseMessage);
+                thisConvo.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error while saving latest message", e);
+                        }
+                    }
+                });
+
                 // Reset UI after saving
                 etMessaage.setText("");
             }
@@ -134,13 +147,28 @@ public class SingleMessageFragment extends Fragment {
     }
 
     private void refreshMessages() {
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.include(Message.KEY_SENDER);
-        query.include(Message.KEY_RECIPIENT);
-        // query.whereEqualTo(Message.KEY_SENDER, thisMessage.getSender().userToParseUser());
-        query.setLimit(MAX_MESSAGES_TO_SHOW);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<Message>() {
+        ParseUser user1 = thisConvo.getPerson1();
+        ParseUser user2 = thisConvo.getPerson2();
+
+        ParseQuery<Message> user1ToUser2 = ParseQuery.getQuery("Message");
+        user1ToUser2.whereEqualTo(Message.KEY_SENDER, user1);
+        user1ToUser2.whereEqualTo(Message.KEY_RECIPIENT, user2);
+
+        ParseQuery<Message> user2ToUser1 = ParseQuery.getQuery("Message");
+        user2ToUser1.whereEqualTo(Message.KEY_SENDER, user2);
+        user2ToUser1.whereEqualTo(Message.KEY_RECIPIENT, user1);
+
+        List<ParseQuery<Message>> queries = new ArrayList<ParseQuery<Message>>();
+        queries.add(user1ToUser2);
+        queries.add(user2ToUser1);
+
+        ParseQuery<Message> finalQuery = ParseQuery.or(queries);
+        finalQuery.include(Message.KEY_SENDER);
+        finalQuery.include(Message.KEY_RECIPIENT);
+        finalQuery.setLimit(MAX_MESSAGES_TO_SHOW);
+        finalQuery.orderByAscending("createdAt");
+
+        finalQuery.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> messages, ParseException e) {
                 if (e != null) {
@@ -148,22 +176,7 @@ public class SingleMessageFragment extends Fragment {
                     return;
                 }
                 Log.i("USER", messages.get(0).getParseUser(Message.KEY_SENDER).getUsername());
-                /* for (Message message : messages) {
-                    ParseQuery<ParseUser> query = ParseQuery.getQuery("ParseUser");
-                    query.whereEqualTo(Message.KEY_SENDER, message.getSender());
-                    query.findInBackground(new FindCallback<ParseUser>() {
-                        @Override
-                        public void done(List<ParseUser> objects, ParseException e) {
-                            if (e != null) {
-                                return;
-                            }
-                            Log.i("OBJECTS", objects.toString());
-                            ParseUser parseSender = objects.get(0);
-                            Log.i("USER", parseSender.toString());
-                            message.setSender(new User(parseSender));
-                        }
-                    });
-                } */
+
                 allMessages.clear();
                 allMessages.addAll(messages);
                 adapter.notifyDataSetChanged();

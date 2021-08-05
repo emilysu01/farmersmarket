@@ -15,15 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.adapters.AllMessagesAdapter;
 import com.example.farmersmarket.models.Conversation;
-import com.example.farmersmarket.models.Message;
-import com.example.farmersmarket.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AllMessagesFragment extends Fragment {
@@ -66,20 +63,19 @@ public class AllMessagesFragment extends Fragment {
 
     private void queryLatestMessages() {
         ParseQuery<Conversation> person1Query = ParseQuery.getQuery("Conversation");
-        person1Query.include(Conversation.KEY_PERSON_1);
-        // person1Query.whereEqualTo(Conversation.KEY_PERSON_1, ParseUser.getCurrentUser());
+        person1Query.whereEqualTo(Conversation.KEY_USER_1, ParseUser.getCurrentUser());
 
-        // ParseQuery<Conversation> person2Query = ParseQuery.getQuery(Conversation.class);
-        // person2Query.whereEqualTo(Conversation.KEY_PERSON_2, ParseUser.getCurrentUser());
+        ParseQuery<Conversation> person2Query = ParseQuery.getQuery("Conversation");
+        person2Query.whereEqualTo(Conversation.KEY_USER_2, ParseUser.getCurrentUser());
 
-        // List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
-        // queries.add(person1Query);
-        // queries.add(person2Query);
+        List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
+        queries.add(person1Query);
+        queries.add(person2Query);
 
-        // ParseQuery<Conversation> finalQuery = ParseQuery.or(queries);
-        person1Query.include(Conversation.KEY_LATEST_MESSAGE);
+        ParseQuery<Conversation> finalQuery = ParseQuery.or(queries);
+        finalQuery.include(Conversation.KEY_LATEST_MESSAGE);
 
-        person1Query.orderByDescending("createdAt");
+        finalQuery.orderByDescending("createdAt");
 
         person1Query.findInBackground(new FindCallback<Conversation>() {
             @Override
@@ -88,9 +84,7 @@ public class AllMessagesFragment extends Fragment {
                     Log.e(TAG, "Error with retrieving all conversations", e);
                     return;
                 }
-
                 Log.i("ALL CONVOS", conversations.toString());
-
                 allConversations.addAll(conversations);
                 adapter.notifyDataSetChanged();
             }

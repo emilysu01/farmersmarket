@@ -1,6 +1,5 @@
 package com.example.farmersmarket.adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,23 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
-import com.example.farmersmarket.fragments.DetailedListingFragment;
 import com.example.farmersmarket.fragments.SingleMessageFragment;
 import com.example.farmersmarket.models.Conversation;
-import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.Message;
 import com.example.farmersmarket.models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.ViewHolder> {
 
+    // Tag for logging statements
     public static final String TAG = "AllMessagesAdapter";
 
     private Context context;
@@ -76,7 +73,7 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     Conversation conversation = conversations.get(position);
-                    // goToMessage(message);
+                    goToMessage(conversation);
                 }
             }
         };
@@ -91,26 +88,22 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
         }
 
         public void bind(Conversation conversation) {
-
             ParseQuery<Message> messageQuery = ParseQuery.getQuery(Message.class);
-            // messageQuery.whereEqualTo(Message.KEY_OBJECT_ID, conversation.getLatestMessage().getObjectId());
+            messageQuery.whereEqualTo(Message.KEY_OBJECT_ID, conversation.getLatestMessage().getObjectId());
             messageQuery.include(Message.KEY_SENDER);
             messageQuery.include(Message.KEY_RECIPIENT);
-            messageQuery.findInBackground(new FindCallback<Message>() {
+            messageQuery.getFirstInBackground(new GetCallback<Message>() {
                 @Override
-                public void done(List<Message> messages, ParseException e) {
+                public void done(Message message, ParseException e) {
                     if (e != null) {
                         Log.e(TAG, "Error with retrieving all message", e);
                         return;
                     }
-
-                    Log.i("Messages", messages.toString());
-                    Message message = messages.get(0);
                     Glide.with(context)
                             .load(message.getParseUser(Message.KEY_SENDER).getParseFile(User.KEY_PROFILE_PIC).getUrl())
                             .into(ivProfilePic);
                     tvName.setText(message.getParseUser(Message.KEY_SENDER).getString(User.KEY_NAME));
-                    tvMessagePreview.setText(conversation.getLatestMessage().getMessage());
+                    tvMessagePreview.setText(message.getMessage());
 
                     ivProfilePic.setOnClickListener(messageClickListener);
                     tvName.setOnClickListener(messageClickListener);
@@ -120,8 +113,8 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
         }
     }
 
-    private void goToMessage(Message message) {
-        Fragment fragment = new SingleMessageFragment(message);
+    private void goToMessage(Conversation conversation) {
+        Fragment fragment = new SingleMessageFragment(conversation);
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 }

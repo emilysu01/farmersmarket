@@ -13,24 +13,24 @@ public class Conversation extends ParseObject {
     // Database keys
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_CREATED_AT = "createdAt";
-    public static final String KEY_PERSON_1 = "person1";
-    public static final String KEY_PERSON_2 = "person2";
+    public static final String KEY_USER_1 = "user1";
+    public static final String KEY_USER_2 = "user2";
     public static final String KEY_LATEST_MESSAGE = "latestMessage";
 
-    public String getPerson1() {
-        return getString(KEY_PERSON_1);
+    public ParseUser getPerson1() {
+        return getParseUser(KEY_USER_1);
     }
 
-    public void setPerson1(String person1) {
-        put(KEY_PERSON_1, person1);
+    public void setPerson1(ParseUser person1) {
+        put(KEY_USER_1, person1);
     }
 
-    public String getPerson2() {
-        return getString(KEY_PERSON_2);
+    public ParseUser getPerson2() {
+        return getParseUser(KEY_USER_2);
     }
 
-    public void setPerson2(String person2) {
-        put(KEY_PERSON_2, person2);
+    public void setPerson2(ParseUser person2) {
+        put(KEY_USER_2, person2);
     }
 
     public Message getLatestMessage() {
