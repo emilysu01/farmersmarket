@@ -1,5 +1,6 @@
 package com.example.farmersmarket.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,30 +65,65 @@ public class SearchFragment extends Fragment {
         rvSearchResults.setAdapter(adapter);
         rvSearchResults.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        // Configure spinners
+        // Configure sort and filter spinners
         final String[] sortOptionSelected = new String[1];
         ArrayList<String> sortOptions = new ArrayList<String>();
-        sortOptions.add("distance");
-        sortOptions.add("price");
-        sortOptions.add("units");
+        sortOptions.add("Sort Options");
+        sortOptions.add("Distance");
+        sortOptions.add("Price");
+        sortOptions.add("Units");
         ArrayAdapter<String> sortedSpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, sortOptions) {
+            @Override
+            public boolean isEnabled(int position){
+                if (position == 0) {
+                    // Disable the first item from spinner because first item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
                 return view;
             }
         };
         sortedSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spSort.setAdapter(sortedSpinnerAdapter);
-
         final String[] filterOptionsSelected = new String[1];
         ArrayList<String> filterOptions = new ArrayList<String>();
-        filterOptions.add("delivery");
-        filterOptions.add("alt");
+        filterOptions.add("Filter Options");
+        filterOptions.add("Delivery available");
+        filterOptions.add("Under $5");
+        filterOptions.add("Under $10");
+        filterOptions.add("Under $15");
         ArrayAdapter<String> filterSpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, filterOptions) {
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0) {
+                    // Disable the first item from spinner because first item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
                 return view;
             }
         };
@@ -102,6 +139,12 @@ public class SearchFragment extends Fragment {
                 if (searchStr.isEmpty()) {
                     Toast.makeText(getContext(), "Search can't be empty", Toast.LENGTH_SHORT).show();
                     return;
+                }
+
+                // Erase previous search from UI
+                if (!allListings.isEmpty()) {
+                    allListings.clear();
+                    adapter.notifyDataSetChanged();
                 }
 
                 // Search for listings using search algorithm
