@@ -1,7 +1,6 @@
 package com.example.farmersmarket.fragments;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -30,20 +29,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.util.ContentLengthInputStream;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
-import com.example.farmersmarket.models.User;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -57,13 +49,15 @@ import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class ListFragment extends Fragment {
@@ -81,18 +75,18 @@ public class ListFragment extends Fragment {
     private ImageView ivListingPic;
     private EditText etDescription;
     private Spinner spCategories;
+    private EditText etPrice;
+    private EditText etUnits;
+    private EditText etSellBy;
+    private Spinner spDelivery;
     private Button btnList;
 
-    // TODO: Refactor to make these fields private
     // Photo file information
     public File photoFile;
     public String photoFileName;
 
-    private FusedLocationProviderClient client;
-
     // Required empty public constructor
     public ListFragment() {
-
     }
 
     @Override
@@ -111,9 +105,13 @@ public class ListFragment extends Fragment {
         ivListingPic = view.findViewById(R.id.ivListingPic);
         etDescription = view.findViewById(R.id.etDescription);
         spCategories = view.findViewById(R.id.spCategories);
+        etPrice = view.findViewById(R.id.etPrice);
+        etUnits = view.findViewById(R.id.etUnits);
+        etSellBy = view.findViewById(R.id.etSellBy);
+        spDelivery = view.findViewById(R.id.spDelivery);
         btnList = view.findViewById(R.id.btnList);
 
-        // Configure spinner
+        // Configure categories spinner
         final String[] categorySelected = {""};
         ArrayList<String> allCategories = new ArrayList<String>();
         allCategories.add("Category");
@@ -139,7 +137,7 @@ public class ListFragment extends Fragment {
                 Log.i(TAG, "Error with retrieving Fruityvice data", t);
             }
         });
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, allCategories) {
+        ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, allCategories) {
             @Override
             public boolean isEnabled(int position){
                 if(position == 0) {
@@ -164,13 +162,41 @@ public class ListFragment extends Fragment {
                 return view;
             }
         };
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spCategories.setAdapter(spinnerAdapter);
+        categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategories.setAdapter(categorySpinnerAdapter);
 
         spCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 categorySelected[0] = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Set delivery spinner
+        final String[] deliveryOptionSelected = new String[1];
+        ArrayList<String> deliveryOptions = new ArrayList<String>();
+        deliveryOptions.add("Pick up only");
+        deliveryOptions.add("Delivery available");
+        deliveryOptions.add("Please contact");
+        ArrayAdapter<String> deliverySpinnderAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, deliveryOptions) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                return view;
+            }
+        };
+        deliverySpinnderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDelivery.setAdapter(deliverySpinnderAdapter);
+        spDelivery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                deliveryOptionSelected[0] = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -196,27 +222,39 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Error checking
-                String description = etDescription.getText().toString();
-                if (description.isEmpty()) {
-                    Toast.makeText(getContext(), "Description can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
+                try {
+                    String description = etDescription.getText().toString();
+                    int price = Integer.parseInt(etPrice.getText().toString());
+                    int units = Integer.parseInt(etUnits.getText().toString());
+                    DateFormat format = new SimpleDateFormat("DD/MM/yyyy", Locale.ENGLISH);
+                    Date sellBy = format.parse(etSellBy.getText().toString());
+                    LatLng coordinates = getLocation();
+                    if (!checkForErrors(description, price, units, sellBy, coordinates)) {
+                        return;
+                    }
+                    // Save listing to database
+                    saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0], coordinates, price, units, new ArrayList<String>(), sellBy, deliveryOptionSelected[0]);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
                 }
-                if (description.length() > 500) {
-                    Toast.makeText(getContext(), "Description can't exceed 500 characters", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Retrive user's location
-                LatLng coordinates = getLocation();
-                if (coordinates == null) {
-                    Toast.makeText(getContext(), "There was an issue retrieving your location", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Save listing to database
-                saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0], coordinates);
             }
         });
+    }
+
+    private boolean checkForErrors(String description, int price, int units, Date sellBy, LatLng coordinates) {
+        if (description.isEmpty()) {
+            Toast.makeText(getContext(), "Description can't be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (description.length() > 500) {
+            Toast.makeText(getContext(), "Description can't exceed 500 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (coordinates == null) {
+            Toast.makeText(getContext(), "There was an issue retrieving your location", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private LatLng getLocation() {
@@ -283,24 +321,19 @@ public class ListFragment extends Fragment {
         }
     }
 
-    private void saveListing(String description, ParseUser currentUser, File photoFile, String category, LatLng coordinates) {
-
-
+    private void saveListing(String description, ParseUser currentUser, File photoFile, String category, LatLng coordinates, int price, int units, ArrayList<String> colors, Date sellBy, String delivery) {
         // Create new listing
-        // TODO: Update with actual data
         Listing listing = new Listing();
         listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
         listing.setLatitude(coordinates.latitude);
         listing.setLongitude(coordinates.longitude);
-        listing.setPrice(10);
-        listing.setUnits(1);
+        listing.setPrice(price);
+        listing.setUnits(units);
         listing.setCategory(category);
-        ArrayList<String> colors = new ArrayList<String>();
-        colors.add("yellow");
         listing.setColors(colors);
-        listing.setSellBy(new Date());
-        listing.setDelivery(false);
+        listing.setSellBy(sellBy);
+        listing.setDelivery(delivery);
         Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);

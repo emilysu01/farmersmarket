@@ -207,6 +207,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_corner"
         android:ems="10"
+        android:hint="Sell By Date"
         android:inputType="date"
         android:paddingStart="10dp"
         android:paddingEnd="10dp" />

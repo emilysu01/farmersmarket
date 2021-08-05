@@ -65,22 +65,20 @@ public class AllMessagesFragment extends Fragment {
     }
 
     private void queryLatestMessages() {
-        ParseQuery<Conversation> person1Query = ParseQuery.getQuery(Conversation.class);
-        // person1Query.whereEqualTo(Conversation.KEY_PERSON_1, ParseUser.getCurrentUser());
+        ParseQuery<Conversation> person1Query = ParseQuery.getQuery("_Conversation");
+        person1Query.include(Conversation.KEY_PERSON_1);
+        person1Query.whereEqualTo(Conversation.KEY_PERSON_1, ParseUser.getCurrentUser().getObjectId());
 
         // ParseQuery<Conversation> person2Query = ParseQuery.getQuery(Conversation.class);
         // person2Query.whereEqualTo(Conversation.KEY_PERSON_2, ParseUser.getCurrentUser());
 
-        //List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
+        // List<ParseQuery<Conversation>> queries = new ArrayList<ParseQuery<Conversation>>();
         // queries.add(person1Query);
         // queries.add(person2Query);
 
         // ParseQuery<Conversation> finalQuery = ParseQuery.or(queries);
-        person1Query.include(Conversation.KEY_PERSON_1);
-        person1Query.include(Conversation.KEY_PERSON_2);
         person1Query.include(Conversation.KEY_LATEST_MESSAGE);
-        person1Query.include(Message.KEY_SENDER);
-        person1Query.include(Message.KEY_RECIPIENT);
+
         person1Query.orderByDescending("createdAt");
 
         person1Query.findInBackground(new FindCallback<Conversation>() {

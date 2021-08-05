@@ -7,7 +7,9 @@ import com.example.farmersmarket.models.Conversation;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.Message;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 public class ParseApplication extends Application {
 
@@ -28,5 +30,10 @@ public class ParseApplication extends Application {
                 .server("https://parseapi.back4app.com")
                 .build()
         );
+
+        ParseUser.enableAutomaticUser();
+        ParseACL defaultACL = new ParseACL();
+        defaultACL.setPublicReadAccess(true);
+        ParseACL.setDefaultACL(defaultACL, true);
     }
 }

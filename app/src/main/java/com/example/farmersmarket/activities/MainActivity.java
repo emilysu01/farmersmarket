@@ -18,6 +18,7 @@ import com.example.farmersmarket.fragments.HomeFragment;
 import com.example.farmersmarket.fragments.ListFragment;
 import com.example.farmersmarket.fragments.ProfileFragment;
 import com.example.farmersmarket.fragments.SearchFragment;
+import com.example.farmersmarket.fragments.SingleMessageFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 

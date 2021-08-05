@@ -88,7 +88,6 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             tvName = itemView.findViewById(R.id.tvName);
             tvMessagePreview = itemView.findViewById(R.id.tvMessagePreview);
-
         }
 
         public void bind(Conversation conversation) {
