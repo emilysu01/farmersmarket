@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class SearchFragment extends Fragment {
     // UI components
     private EditText etSearchBar;
     private ImageButton btnSearch;
+    private Spinner spSort;
     private RecyclerView rvSearchResults;
 
     // Listings data structure and adapter
@@ -51,6 +53,7 @@ public class SearchFragment extends Fragment {
         etSearchBar = view.findViewById(R.id.etSearchBar);
         btnSearch = view.findViewById(R.id.btnSearch);
         rvSearchResults = view.findViewById(R.id.rvSearchResults);
+        spSort = view.findViewById(R.id.spSort);
 
         // Configure adapter
         adapter = new ShortListingsAdapter(getContext(), allListings);

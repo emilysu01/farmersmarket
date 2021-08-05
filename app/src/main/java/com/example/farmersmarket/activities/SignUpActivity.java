@@ -182,7 +182,7 @@ public class SignUpActivity extends AppCompatActivity {
         newParseUser.put(User.KEY_PASSWORD, password);
         newParseUser.put(User.KEY_EMAIL, email);
         newParseUser.put(User.KEY_NAME, firstName + " " + lastName);
-        newParseUser.put(User.KEY_COORDINATES, coordinates);
+        // newParseUser.put(User.KEY_COORDINATES, coordinates);
         newParseUser.put(User.KEY_ZIP, zip);
 
         // Sign up with Parse

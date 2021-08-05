@@ -2,6 +2,7 @@ package com.example.farmersmarket.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         // Log out
         if (item.getItemId() == R.id.miLogOut) {
             ParseUser.logOut();
+            Log.i("CURRENT USER", ParseUser.getCurrentUser().toString());
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

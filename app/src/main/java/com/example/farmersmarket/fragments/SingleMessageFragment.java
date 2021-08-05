@@ -137,7 +137,7 @@ public class SingleMessageFragment extends Fragment {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_RECIPIENT);
-        query.whereEqualTo(Message.KEY_SENDER, thisMessage.getSender().userToParseUser());
+        // query.whereEqualTo(Message.KEY_SENDER, thisMessage.getSender().userToParseUser());
         query.setLimit(MAX_MESSAGES_TO_SHOW);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Message>() {

@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -106,5 +108,17 @@ public class SearchAlgorithm {
                 }
             }
         });
+    }
+
+    public void sorting(ArrayList<Listing> searchResults, String criteria) {
+        ArrayList<Integer> searchResultsCriteria = new ArrayList<Integer>();
+        for (Listing listing : searchResults) {
+            searchResultsCriteria.add(listing.getInt(criteria));
+        }
+        Collections.sort(searchResultsCriteria);
+        HashMap<Listing, Integer> searchResultsSorted = new HashMap<Listing, Integer>();
+        for (Listing listing : searchResults) {
+            searchResultsCriteria.add(listing, 0.5 * searchResultsCriteria + 0.5 * listing.getDistance());
+        }
     }
 }

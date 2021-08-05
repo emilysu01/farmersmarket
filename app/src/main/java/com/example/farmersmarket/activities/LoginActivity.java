@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.farmersmarket.LocationUtils;
 import com.example.farmersmarket.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -36,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Check and ask for location permissions
+        LocationUtils.checkAndRequestPermissions(this, LoginActivity.this);
 
         // Checks if a user is already logged in
         if (ParseUser.getCurrentUser() != null) {

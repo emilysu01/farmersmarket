@@ -1,7 +1,6 @@
 package com.example.farmersmarket.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +29,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ExploreFragment extends Fragment {
 
@@ -136,10 +133,10 @@ public class ExploreFragment extends Fragment {
         // Query database for listings on screen
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
         query.include(Listing.KEY_AUTHOR);
-        query.whereGreaterThanOrEqualTo(Listing.KEY_LONG, left);
-        query.whereLessThanOrEqualTo(Listing.KEY_LONG, right);
-        query.whereGreaterThanOrEqualTo(Listing.KEY_LAT, bottom);
-        query.whereLessThanOrEqualTo(Listing.KEY_LAT, top);
+        query.whereGreaterThanOrEqualTo(Listing.KEY_LONGITUDE, left);
+        query.whereLessThanOrEqualTo(Listing.KEY_LONGITUDE, right);
+        query.whereGreaterThanOrEqualTo(Listing.KEY_LATITUDE, bottom);
+        query.whereLessThanOrEqualTo(Listing.KEY_LATITUDE, top);
         query.findInBackground(new FindCallback<Listing>() {
             @Override
             public void done(List<Listing> listings, ParseException e) {

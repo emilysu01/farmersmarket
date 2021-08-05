@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.models.Message;
+import com.example.farmersmarket.models.User;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class SingleMessageAdapter extends RecyclerView.Adapter<SingleMessageAdap
     public int getItemViewType(int position) {
         // Check if the message is incoming or outgoing
         Message message = allMessages.get(position);
-        String senderId = message.getSenderId();
+        String senderId = message.getSender().getObjectId();
         if (senderId != null && !senderId.equals(this.userId)) {
             return MESSAGE_INCOMING;
         }
@@ -95,11 +96,11 @@ public class SingleMessageAdapter extends RecyclerView.Adapter<SingleMessageAdap
         @Override
         void bindMessage(Message message) {
             Glide.with(context)
-                    .load(message.getSender().getProfilePic().getUrl())
+                    .load(message.getSender().getParseFile(User.KEY_PROFILE_PIC).getUrl())
                     .circleCrop()
                     .into(ivOtherProfilePic);
             tvBody.setText(message.getMessage());
-            tvName.setText(message.getSender().getName());
+            tvName.setText(message.getSender().getString(User.KEY_NAME));
         }
     }
 
@@ -120,11 +121,11 @@ public class SingleMessageAdapter extends RecyclerView.Adapter<SingleMessageAdap
             Log.i(TAG, "OUTGOING MESSAGE");
             Log.i("SENDER", message.getSender().toString());
             Glide.with(context)
-                    .load(message.getSender().getProfilePic().getUrl())
+                    .load(message.getSender().getParseFile(User.KEY_PROFILE_PIC).getUrl())
                     .circleCrop()
                     .into(ivMyProfilePic);
             tvBody.setText(message.getMessage());
-            Log.i(TAG,message.getSender().getName());
+            Log.i(TAG,message.getSender().getString(User.KEY_NAME));
             // tvName.setText(message.getSender().getName());
         }
     }

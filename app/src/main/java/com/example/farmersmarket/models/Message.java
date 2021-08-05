@@ -2,8 +2,7 @@ package com.example.farmersmarket.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-
-import java.util.Date;
+import com.parse.ParseUser;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
@@ -19,36 +18,20 @@ public class Message extends ParseObject {
     public static final String KEY_MESSAGE = "message";
 
     // Getters and setters
-    public String getObjectId() {
-        return getString(KEY_OBJECT_ID);
+    public ParseUser getSender() {
+        return getParseUser(KEY_SENDER);
     }
 
-    public void setObjectId(String objectId) {
-        put(KEY_OBJECT_ID, objectId);
+    public void setSender(ParseUser sender) {
+        put(KEY_SENDER, sender);
     }
 
-    public Date getMessageTime() {
-        return getDate(KEY_CREATED_AT);
+    public ParseUser getRecipient() {
+        return getParseUser(KEY_RECIPIENT);
     }
 
-    public void setMessageTime(Date time) {
-        put(KEY_CREATED_AT, time);
-    }
-
-    public User getSender() {
-        return new User(getParseUser(KEY_SENDER));
-    }
-
-    public void setSender(User sender) {
-        put(KEY_SENDER, sender.userToParseUser());
-    }
-
-    public User getRecipient() {
-        return new User(getParseUser(KEY_RECIPIENT));
-    }
-
-    public void setRecipient(User recipient) {
-        put(KEY_RECIPIENT, recipient.userToParseUser());
+    public void setRecipient(ParseUser recipient) {
+        put(KEY_RECIPIENT, recipient);
     }
 
     public String getMessage() {
@@ -57,9 +40,5 @@ public class Message extends ParseObject {
 
     public void setMessage(String message) {
         put(KEY_MESSAGE, message);
-    }
-
-    public String getSenderId() {
-        return getParseUser(KEY_SENDER).getObjectId();
     }
 }

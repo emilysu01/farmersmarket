@@ -3,7 +3,6 @@ package com.example.farmersmarket.models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -27,8 +26,8 @@ public class Listing extends ParseObject {
     public static final String KEY_AUTHOR = "author";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGES = "images";
-    public static final String KEY_LAT = "latitude";
-    public static final String KEY_LONG = "longitude";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
     public static final String KEY_PRICE = "price";
     public static final String KEY_UNITS = "units";
     public static final String KEY_CATEGORY = "category";
@@ -37,10 +36,6 @@ public class Listing extends ParseObject {
     public static final String KEY_DELIVERY = "delivery";
 
     // Getters and setters
-
-    public void setCreatedAt(Date createdAt) {
-        put(KEY_CREATED_AT, createdAt);
-    }
 
     public ParseUser getAuthor() {
         return getParseUser(KEY_AUTHOR);
@@ -67,19 +62,19 @@ public class Listing extends ParseObject {
     }
 
     public double getLatitude() {
-        return getDouble(KEY_LAT);
+        return getDouble(KEY_LATITUDE);
     }
 
     public void setLatitude(double latitude) {
-        put(KEY_LAT, latitude);
+        put(KEY_LATITUDE, latitude);
     }
 
     public double getLongitude() {
-        return getDouble(KEY_LONG);
+        return getDouble(KEY_LONGITUDE);
     }
 
     public void setLongitude(double longitude) {
-        put(KEY_LONG, longitude);
+        put(KEY_LONGITUDE, longitude);
     }
 
     public int getPrice() {
@@ -106,6 +101,7 @@ public class Listing extends ParseObject {
         put(KEY_CATEGORY, category);
     }
 
+    // TODO CHECK
     public List<String> getColors() {
         try {
             JSONArray jsonColors = getJSONArray(KEY_COLORS);

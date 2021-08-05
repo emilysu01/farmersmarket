@@ -65,9 +65,9 @@ public class AllMessagesFragment extends Fragment {
     }
 
     private void queryLatestMessages() {
-        ParseQuery<Conversation> person1Query = ParseQuery.getQuery("_Conversation");
+        ParseQuery<Conversation> person1Query = ParseQuery.getQuery("Conversation");
         person1Query.include(Conversation.KEY_PERSON_1);
-        person1Query.whereEqualTo(Conversation.KEY_PERSON_1, ParseUser.getCurrentUser().getObjectId());
+        person1Query.whereEqualTo(Conversation.KEY_PERSON_1, ParseUser.getCurrentUser());
 
         // ParseQuery<Conversation> person2Query = ParseQuery.getQuery(Conversation.class);
         // person2Query.whereEqualTo(Conversation.KEY_PERSON_2, ParseUser.getCurrentUser());
