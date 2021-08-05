@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Log out
         if (item.getItemId() == R.id.miLogOut) {
-            ParseUser.logOut();
-            Log.i("CURRENT USER", ParseUser.getCurrentUser().toString());
+            ParseUser.logOutInBackground();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

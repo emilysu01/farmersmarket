@@ -167,11 +167,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUp(String firstName, String lastName, String username, String email, String password, String zip) {
-        Log.i(TAG, "Attempting to sign up user with username " + username);
+        Log.i(TAG, "Attempting to sign up user with username: " + username);
 
         // Retrieve the user's current location
-        double[] coordinates = getCoordinates();
+        LatLng coordinates = LocationUtils.getCoordinates(getApplicationContext(), SignUpActivity.this);
         if (coordinates == null) {
+            Toast.makeText(SignUpActivity.this, "There was an issue with signing up. Please try again.", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Error with retrieving user's location for sign up");
             return;
         }
@@ -182,7 +183,8 @@ public class SignUpActivity extends AppCompatActivity {
         newParseUser.put(User.KEY_PASSWORD, password);
         newParseUser.put(User.KEY_EMAIL, email);
         newParseUser.put(User.KEY_NAME, firstName + " " + lastName);
-        // newParseUser.put(User.KEY_COORDINATES, coordinates);
+        newParseUser.put(User.KEY_LATITUDE, coordinates.latitude);
+        newParseUser.put(User.KEY_LONGITUDE, coordinates.longitude);
         newParseUser.put(User.KEY_ZIP, zip);
 
         // Sign up with Parse
@@ -194,7 +196,6 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with sign up ", e);
                     return;
                 }
-
                 Toast.makeText(SignUpActivity.this, "Successfully signed up!", Toast.LENGTH_SHORT).show();;
 
                 // Move to main screen
@@ -203,6 +204,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    /*
     private double[] getCoordinates() {
         try {
             // Check for permission
@@ -218,6 +220,7 @@ public class SignUpActivity extends AppCompatActivity {
             return null;
         }
     }
+    */
 
     private void goToLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);

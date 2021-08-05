@@ -38,14 +38,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Check and ask for location permissions
+        // Check and ask for permissions
         LocationUtils.checkAndRequestPermissions(this, LoginActivity.this);
 
-        // Checks if a user is already logged in
-        // TODO FIX
-        /* if (ParseUser.getCurrentUser() != null) {
+        // Check if a user is already logged in
+        if (ParseUser.getCurrentUser() != null) {
             goToMainActivity();
-        } */
+        }
 
         // Retrieve UI components
         ivLogo = findViewById(R.id.ivLogo);
@@ -58,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         final Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_button);
         final Animation textAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_text);
 
-        // Set logo
+        // Display UI
         Glide.with(this)
                 .load(getResources().getDrawable(R.drawable.ic_basket))
                 .into(ivLogo);
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
-        Log.i(TAG, "Attempting to log in user with username " + username);
+        Log.i(TAG, "Attempting to log in user with username: " + username);
 
         // Log in with Parse
         ParseUser.logInInBackground(username, password, new LogInCallback() {
