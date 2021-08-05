@@ -84,9 +84,6 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
         private ImageView ivListingPic;
         private TextView tvDescription;
 
-        // Animations
-        private Animation fadeAnimation;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -96,9 +93,6 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
             tvName = itemView.findViewById(R.id.tvName);
             ivListingPic = itemView.findViewById(R.id.ivListingPic);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-
-            // Set up animations
-            fadeAnimation = AnimationUtils.loadAnimation(context, R.anim.fade);
         }
 
         public void bind(Listing listing) {
@@ -145,30 +139,16 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
                     }
                 }
             });
-            ivListingPic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        Listing listing = allListings.get(position);
-                        goToDetailedListingScreen(listing);
-                    }
-                }
-            });
             ivListingPic.setOnClickListener(new DoubleClickListener() {
                 @Override
                 public void onDoubleClick() {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Listing listing = allListings.get(position);
-                        Glide.with(context)
-                                .load(context.getResources().getDrawable(R.drawable.ic_basket))
-                                .into(ivListingPic);
                         addToBasket(listing);
                     }
                 }
             });
-
             tvDescription.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -183,6 +163,7 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
     }
 
     private void addToBasket(Listing listing) {
+        // Retrieve old basket, add listing to old basket, and update basket in database
         ParseUser currentUser = ParseUser.getCurrentUser();
         List<Listing> currentBasket = currentUser.getList(User.KEY_BASKET);
         currentBasket.add(0, listing);
@@ -191,11 +172,11 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Error with adding to basket", e);
+                    Toast.makeText(context, "There was an issue adding to basket. Please try again.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue with adding to basket", e);
                     return;
                 }
-                Log.i("NEW BASKET", currentUser.getList("basket").toString());
-
+                Toast.makeText(context, "Listing added to basket successfully!", Toast.LENGTH_SHORT).show();
             }
         });
     }

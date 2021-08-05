@@ -1,15 +1,10 @@
 package com.example.farmersmarket.fragments;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,10 +23,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.farmersmarket.LocationUtils;
 import com.example.farmersmarket.R;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
@@ -58,7 +53,6 @@ import java.util.Locale;
 import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.LOCATION_SERVICE;
 
 public class ListFragment extends Fragment {
 
@@ -152,7 +146,7 @@ public class ListFragment extends Fragment {
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if(position == 0){
+                if(position == 0) {
                     // Set the hint text color gray
                     tv.setTextColor(Color.GRAY);
                 }
@@ -168,6 +162,9 @@ public class ListFragment extends Fragment {
         spCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    ((TextView) spCategories.getSelectedView()).setTextColor(getResources().getColor(R.color.grey));
+                }
                 categorySelected[0] = parent.getItemAtPosition(position).toString();
             }
 
@@ -180,9 +177,8 @@ public class ListFragment extends Fragment {
         // Set delivery spinner
         final String[] deliveryOptionSelected = new String[1];
         ArrayList<String> deliveryOptions = new ArrayList<String>();
-        deliveryOptions.add("Pick up only");
-        deliveryOptions.add("Delivery available");
-        deliveryOptions.add("Please contact");
+        deliveryOptions.add("Available");
+        deliveryOptions.add("Unavailable");
         ArrayAdapter<String> deliverySpinnderAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, deliveryOptions) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -226,9 +222,9 @@ public class ListFragment extends Fragment {
                     String description = etDescription.getText().toString();
                     int price = Integer.parseInt(etPrice.getText().toString());
                     int units = Integer.parseInt(etUnits.getText().toString());
-                    DateFormat format = new SimpleDateFormat("DD/MM/yyyy", Locale.ENGLISH);
+                    DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
                     Date sellBy = format.parse(etSellBy.getText().toString());
-                    LatLng coordinates = getLocation();
+                    LatLng coordinates = LocationUtils.getCoordinates(getContext(), getActivity());
                     if (!checkForErrors(description, price, units, sellBy, coordinates)) {
                         return;
                     }
@@ -250,27 +246,23 @@ public class ListFragment extends Fragment {
             Toast.makeText(getContext(), "Description can't exceed 500 characters", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (price == 0) {
+            Toast.makeText(getContext(), "Price can't be empty or $0", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (units == 0) {
+            Toast.makeText(getContext(), "Units available can't be empty of 0", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (sellBy.before(new Date())) {
+            Toast.makeText(getContext(), "Sell by date can't be before today", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if (coordinates == null) {
             Toast.makeText(getContext(), "There was an issue retrieving your location", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
-    }
-
-    private LatLng getLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return null;
-        }
-
-        Criteria criteria = new Criteria();
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location location = locationManager.getLastKnownLocation(provider);
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng newPos = new LatLng(latitude, longitude);
-        return newPos;
     }
 
     private void launchUploader() {
@@ -333,12 +325,15 @@ public class ListFragment extends Fragment {
         listing.setCategory(category);
         listing.setColors(colors);
         listing.setSellBy(sellBy);
-        listing.setDelivery(delivery);
+        if (delivery.equals("Available")) {
+            listing.setDelivery(true);
+        } else {
+            listing.setDelivery(false);
+        }
         Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        // TODO: Update to upload multiple pictures
         ArrayList<ParseFile> imagesArray = new ArrayList<ParseFile>();
         imagesArray.add(new ParseFile(byteArray));
         listing.setImages(imagesArray);
@@ -355,6 +350,9 @@ public class ListFragment extends Fragment {
 
                 // Reset UI after saving
                 etDescription.setText("");
+                etPrice.setText("");
+                etUnits.setText("");
+                etSellBy.setText("");
                 ivListingPic.setImageResource(0);
             }
         });

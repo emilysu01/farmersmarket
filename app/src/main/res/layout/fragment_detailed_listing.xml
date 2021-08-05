@@ -7,97 +7,219 @@
         android:animateLayoutChanges="true"
         android:fillViewport="true" >
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp">
+
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="0dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/ivProfilePic"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Emily Su" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/tvName"
+            android:textColor="#808080"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="@emilysu01" />
+
+        <ImageView
+            android:id="@+id/ivListingPic"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_below="@+id/ivProfilePic"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="5dp"
+
+            android:layout_marginEnd="0dp"
+            android:foregroundGravity="center|center_horizontal"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivListingPic"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:maxLines="3"
+            android:textSize="16sp"
+            tools:text="Hi! I'm selling apples grown on my tree. $5 for 5 apples. Pick up in Berkeley only." />
+
+        <Button
+            android:id="@+id/btnContact"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_below="@+id/mvSellerLocation"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="159dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/light_orange"
+            android:foregroundGravity="center|center_horizontal"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:text="Contact" />
+
+        <TextView
+            android:id="@+id/tvPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/tvCategory"
+            android:text="Price:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSellByDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvPriceLabel"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:text="Sell By Date:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSellerLocationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSellByDate"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:text="Seller Location:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPriceLabel5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUnitsLabel"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/tvSellByDate"
+            android:text="Delivery:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCategoryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="Category:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvUnitsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/tvPrice"
+            android:text="Units Available:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/tvCategoryLabel"
+            tools:text="Apples" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/tvPriceLabel"
+            tools:text="$10" />
+
+        <TextView
+            android:id="@+id/tvSellByDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUnitsLabel"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/tvSellByDateLabel"
+            tools:text="08/22/2021" />
+
+        <TextView
+            android:id="@+id/tvDelivery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUnitsLabel"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/tvPriceLabel5"
+            tools:text="No" />
+
+        <TextView
+            android:id="@+id/tvUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescription"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@+id/tvUnitsLabel"
+            tools:text="$10" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mvSellerLocation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="300dp"
+            android:layout_below="@+id/tvSellerLocationLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp" />
 
-            <ImageView
-                android:id="@+id/ivProfilePic"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="0dp"
-                tools:srcCompat="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="35dp"
-                android:layout_toEndOf="@+id/ivProfilePic"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="Emily Su" />
-
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="35dp"
-                android:layout_toEndOf="@+id/tvName"
-                android:textColor="#808080"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="@emilysu01" />
-
-            <ImageView
-                android:id="@+id/ivListingPic"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_below="@+id/ivProfilePic"
-                android:layout_alignParentStart="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="0dp"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ivListingPic"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:maxLines="3"
-                android:textSize="16sp"
-                tools:text="Hi! I'm selling apples grown on my tree. $5 for 5 apples. Pick up in Berkeley only." />
-
-            <Button
-                android:id="@+id/btnContact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mvSellerLocation"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:backgroundTint="@color/light_orange"
-                android:text="Contact" />
-
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mvSellerLocation"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_below="@+id/tvDescription"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="-22dp" />
-        </RelativeLayout>
+    </RelativeLayout>
 </ScrollView>

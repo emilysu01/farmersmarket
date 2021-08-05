@@ -132,11 +132,11 @@ public class Listing extends ParseObject {
         put(KEY_SELL_BY, sellBy);
     }
 
-    public String isDelivery() {
-        return getString(KEY_DELIVERY);
+    public boolean getDelivery() {
+        return getBoolean(KEY_DELIVERY);
     }
 
-    public void setDelivery(String delivery) {
+    public void setDelivery(boolean delivery) {
         put(KEY_DELIVERY, delivery);
     }
 }
