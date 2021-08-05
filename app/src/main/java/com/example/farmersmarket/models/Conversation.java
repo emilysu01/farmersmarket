@@ -17,19 +17,19 @@ public class Conversation extends ParseObject {
     public static final String KEY_PERSON_2 = "person2";
     public static final String KEY_LATEST_MESSAGE = "latestMessage";
 
-    public ParseUser getPerson1() {
-        return getParseUser(KEY_PERSON_1);
+    public String getPerson1() {
+        return getString(KEY_PERSON_1);
     }
 
-    public void setPerson1(ParseUser person1) {
+    public void setPerson1(String person1) {
         put(KEY_PERSON_1, person1);
     }
 
-    public ParseUser getPerson2() {
-        return getParseUser(KEY_PERSON_2);
+    public String getPerson2() {
+        return getString(KEY_PERSON_2);
     }
 
-    public void setPerson2(ParseUser person2) {
+    public void setPerson2(String person2) {
         put(KEY_PERSON_2, person2);
     }
 

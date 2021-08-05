@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/etSearchBar"
         android:layout_width="309dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
@@ -34,22 +34,55 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchResults"
-        android:layout_width="390dp"
-        android:layout_height="591dp"
-        android:layout_below="@+id/etSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/spFilter"
         android:layout_alignParentStart="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp" />
 
     <Spinner
         android:id="@+id/spSort"
         android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvSort"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp" />
+
+    <Spinner
+        android:id="@+id/spFilter"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvFilter"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp" />
+
+    <TextView
+        android:id="@+id/tvSort"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etSearchBar"
         android:layout_alignParentStart="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_marginTop="15dp"
+        android:text="Sort Criteria" />
+
+    <TextView
+        android:id="@+id/tvFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spSort"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Filter Criteria" />
+
 </RelativeLayout>

@@ -42,9 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         LocationUtils.checkAndRequestPermissions(this, LoginActivity.this);
 
         // Checks if a user is already logged in
-        if (ParseUser.getCurrentUser() != null) {
+        // TODO FIX
+        /* if (ParseUser.getCurrentUser() != null) {
             goToMainActivity();
-        }
+        } */
 
         // Retrieve UI components
         ivLogo = findViewById(R.id.ivLogo);
