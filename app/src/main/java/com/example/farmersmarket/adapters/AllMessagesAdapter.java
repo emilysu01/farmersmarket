@@ -24,6 +24,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,12 +100,24 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
                         Log.e(TAG, "Error with retrieving all message", e);
                         return;
                     }
-                    Glide.with(context)
-                            .load(message.getParseUser(Message.KEY_SENDER).getParseFile(User.KEY_PROFILE_PIC).getUrl())
-                            .into(ivProfilePic);
-                    tvName.setText(message.getParseUser(Message.KEY_SENDER).getString(User.KEY_NAME));
-                    tvMessagePreview.setText(message.getMessage());
 
+                    try {
+                        if (conversation.getPerson1().equals(ParseUser.getCurrentUser())) {
+                            Glide.with(context)
+                                    .load(conversation.getPerson1().fetchIfNeeded().getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                                    .into(ivProfilePic);
+                            tvName.setText(conversation.getPerson1().fetchIfNeeded().getString(User.KEY_NAME));
+                        } else {
+                            Log.i("PROF PIC", conversation.getPerson1().getObjectId());
+                            Glide.with(context)
+                                    .load(conversation.getPerson2().fetchIfNeeded().getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                                    .into(ivProfilePic);
+                            tvName.setText(conversation.getPerson2().fetchIfNeeded().getString(User.KEY_NAME));
+                        }
+                    } catch (ParseException error) {
+
+                    }
+                    tvMessagePreview.setText(message.getMessage());
                     ivProfilePic.setOnClickListener(messageClickListener);
                     tvName.setOnClickListener(messageClickListener);
                     tvMessagePreview.setOnClickListener(messageClickListener);

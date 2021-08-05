@@ -101,7 +101,6 @@ public class SingleMessageFragment extends Fragment {
                 }
 
                 sendMessage(typedText);
-                refreshMessages();
             }
         });
 
@@ -118,7 +117,14 @@ public class SingleMessageFragment extends Fragment {
         // Create new message
         Message parseMessage = new Message();
         parseMessage.put(Message.KEY_SENDER, ParseUser.getCurrentUser());
-        parseMessage.put(Message.KEY_RECIPIENT, ParseUser.getCurrentUser());
+        Log.i("THIS", ParseUser.getCurrentUser().getObjectId());
+        if (thisConvo.getPerson1().equals(ParseUser.getCurrentUser())) {
+            parseMessage.put(Message.KEY_RECIPIENT, thisConvo.getPerson1());
+            Log.i("OTHER", thisConvo.getPerson2().getObjectId());
+        } else {
+            parseMessage.put(Message.KEY_RECIPIENT, thisConvo.getPerson2());
+            Log.i("OTHER", thisConvo.getPerson1().getObjectId());
+        }
         parseMessage.put(Message.KEY_MESSAGE, message);
 
         parseMessage.saveInBackground(new SaveCallback() {
@@ -142,6 +148,8 @@ public class SingleMessageFragment extends Fragment {
 
                 // Reset UI after saving
                 etMessaage.setText("");
+
+                refreshMessages();
             }
         });
     }
