@@ -37,8 +37,10 @@ public class SearchAlgorithm {
     // Tag for logging statements
     public static final String TAG = "SearchAlgorithm";
 
+    private static ArrayList<Listing> searchResults;
     private static Spinner thisSpSort;
     private static Spinner thisSpFilter;
+    public static final int MAX_NUM_OF_LISTINGS = 10;
 
     public static void search(String rawSearch, ArrayList<Listing> listings, ShortListingsAdapter adapter, Spinner spSort, Spinner spFilter) {
         // Set UI components
@@ -77,8 +79,22 @@ public class SearchAlgorithm {
                         return;
                     }
 
+                    int userZip = Integer.parseInt(ParseUser.getCurrentUser().getString(User.KEY_ZIP));
+                    int counter = 0;
                     // Query the database for relevant listings and update UI
-                    queryListings(category, listings, adapter);
+                    while (searchResults.size() < MAX_NUM_OF_LISTINGS) {
+                        int prevLen = searchResults.size();
+                        queryListings(category, listings, adapter, userZip + counter);
+                        if (searchResults.size() >= MAX_NUM_OF_LISTINGS) {
+                            break;
+                        }
+                        queryListings(category, listings, adapter, userZip - counter);
+                        int currLen = searchResults.size();
+                        if (prevLen == currLen) {
+                            break;
+                        }
+                        counter += 1;
+                    }
 
                 } catch (JSONException e) {
                     Log.i(TAG, "Error with parsing Fruityvice data", e);
@@ -102,12 +118,13 @@ public class SearchAlgorithm {
         return "";
     }
 
-    private static void queryListings(String category, ArrayList<Listing> allListings, ShortListingsAdapter adapter) {
+    private static void queryListings(String category, ArrayList<Listing> allListings, ShortListingsAdapter adapter, int zip) {
         ParseQuery<Listing> query = ParseQuery.getQuery(Listing.class);
         query.include(Listing.KEY_AUTHOR);
         query.whereEqualTo(Listing.KEY_CATEGORY, category);
+        query.whereEqualTo(Listing.KEY_ZIP, String.valueOf(zip));
         query.setLimit(100);
-        ArrayList<Listing> searchResults = new ArrayList<Listing>();
+        ArrayList<Listing> searchResultsQuery = new ArrayList<Listing>();
         query.findInBackground(new FindCallback<Listing>() {
             @Override
             public void done(List<Listing> listings, ParseException e) {
@@ -142,6 +159,7 @@ public class SearchAlgorithm {
 
                     // Display search results on UI
                     searchResults.addAll(sortedListings.keySet());
+                    searchResultsQuery.addAll(sortedListings.keySet());
                     allListings.addAll(listings);
                     adapter.notifyDataSetChanged();
 
@@ -149,7 +167,7 @@ public class SearchAlgorithm {
                     thisSpSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            SearchAlgorithm.sorting(searchResults, parent.getItemAtPosition(position).toString(), allListings, adapter);
+                            SearchAlgorithm.sorting(searchResultsQuery, parent.getItemAtPosition(position).toString(), allListings, adapter);
                         }
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
@@ -159,7 +177,7 @@ public class SearchAlgorithm {
                     thisSpFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            SearchAlgorithm.filtering(searchResults, parent.getItemAtPosition(position).toString(), allListings, adapter);
+                            SearchAlgorithm.filtering(searchResultsQuery, parent.getItemAtPosition(position).toString(), allListings, adapter);
                         }
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {

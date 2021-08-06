@@ -34,6 +34,7 @@ public class Listing extends ParseObject {
     public static final String KEY_COLORS = "colors";
     public static final String KEY_SELL_BY = "sellBy";
     public static final String KEY_DELIVERY = "delivery";
+    public static final String KEY_ZIP = "zip";
 
     // Getters and setters
 
