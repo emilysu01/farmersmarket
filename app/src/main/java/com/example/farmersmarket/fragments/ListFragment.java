@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,8 +29,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.farmersmarket.LocationUtils;
 import com.example.farmersmarket.R;
+import com.example.farmersmarket.SearchAlgorithm;
 import com.example.farmersmarket.Utils;
 import com.example.farmersmarket.models.Listing;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,6 +79,24 @@ public class ListFragment extends Fragment {
     private EditText etSellBy;
     private Spinner spDelivery;
     private Button btnList;
+    private ImageButton ibRed;
+    private ImageButton ibOrange;
+    private ImageButton ibYellow;
+    private ImageButton ibGreen;
+    private ImageButton ibBlue;
+    private ImageButton ibPurple;
+    private ImageButton ibWhite;
+    private ImageButton ibBrown;
+    private ImageButton ibBlack;
+    private ImageView ivRedClicked;
+    private ImageView ivOrangeClicked;
+    private ImageView ivYellowClicked;
+    private ImageView ivGreenClicked;
+    private ImageView ivBlueClicked;
+    private ImageView ivPurpleClicked;
+    private ImageView ivWhiteClicked;
+    private ImageView ivBrownClicked;
+    private ImageView ivBlackClicked;
 
     // Photo file information
     public File photoFile;
@@ -104,6 +127,137 @@ public class ListFragment extends Fragment {
         etSellBy = view.findViewById(R.id.etSellBy);
         spDelivery = view.findViewById(R.id.spDelivery);
         btnList = view.findViewById(R.id.btnList);
+        ibRed = view.findViewById(R.id.ibRed);
+        ibOrange = view.findViewById(R.id.ibOrange);
+        ibYellow = view.findViewById(R.id.ibYellow);
+        ibGreen = view.findViewById(R.id.ibGreen);
+        ibBlue = view.findViewById(R.id.ibBlue);
+        ibPurple = view.findViewById(R.id.ibPurple);
+        ibWhite = view.findViewById(R.id.ibWhite);
+        ibBrown = view.findViewById(R.id.ibBrown);
+        ibBlack = view.findViewById(R.id.ibBlack);
+        ivRedClicked = view.findViewById(R.id.ivRedClicked);
+        ivOrangeClicked = view.findViewById(R.id.ivOrangeClicked);
+        ivYellowClicked = view.findViewById(R.id.ivYellowClicked);
+        ivGreenClicked = view.findViewById(R.id.ivGreenClicked);
+        ivBlueClicked = view.findViewById(R.id.ivBlueClicked);
+        ivPurpleClicked = view.findViewById(R.id.ivPurpleClicked);
+        ivWhiteClicked = view.findViewById(R.id.ivWhiteClicked);
+        ivBrownClicked = view.findViewById(R.id.ivBrownClicked);
+        ivBlackClicked = view.findViewById(R.id.ivBlackClicked);
+
+        ibRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibRed.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivRedClicked);
+                ivRedClicked.bringToFront();
+            }
+        });
+
+        ibOrange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibOrange.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivOrangeClicked);
+                ivOrangeClicked.bringToFront();
+            }
+        });
+
+        ibYellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibYellow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivYellowClicked);
+                ivYellowClicked.bringToFront();
+            }
+        });
+
+        ibGreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibGreen.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivGreenClicked);
+                ivGreenClicked.bringToFront();
+            }
+        });
+
+        ibBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibBlue.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivBlueClicked);
+                ivBlueClicked.bringToFront();
+            }
+        });
+
+        ibPurple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibPurple.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivPurpleClicked);
+                ivPurpleClicked.bringToFront();
+            }
+        });
+
+        ibWhite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibWhite.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_black_check))
+                        .into(ivWhiteClicked);
+                ivWhiteClicked.bringToFront();
+            }
+        });
+
+        ibBrown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibBrown.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivBrownClicked);
+                ivBrownClicked.bringToFront();
+            }
+        });
+
+        ibBlack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibBlack.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
+                Glide.with(getContext())
+                        .load(getResources().getDrawable(R.drawable.ic_white_check))
+                        .into(ivBlackClicked);
+                ivBlackClicked.bringToFront();
+            }
+        });
+
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
 
         // Configure categories spinner
         final String[] categorySelected = {""};
@@ -158,16 +312,14 @@ public class ListFragment extends Fragment {
         };
         categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategories.setAdapter(categorySpinnerAdapter);
-
         spCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    ((TextView) spCategories.getSelectedView()).setTextColor(getResources().getColor(R.color.grey));
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
                 }
-                categorySelected[0] = parent.getItemAtPosition(position).toString();
+                categorySelected[0] = allCategories.get(position);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -175,48 +327,76 @@ public class ListFragment extends Fragment {
         });
 
         // Set delivery spinner
-        final String[] deliveryOptionSelected = new String[1];
-        ArrayList<String> deliveryOptions = new ArrayList<String>();
-        deliveryOptions.add("Available");
-        deliveryOptions.add("Unavailable");
-        ArrayAdapter<String> deliverySpinnderAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, deliveryOptions) {
+        final String[] deliveryOptionSelected = {""};
+        ArrayList<String> allDeliveryOptions = new ArrayList<String>();
+        allDeliveryOptions.add("Delivery");
+        allDeliveryOptions.add("Available");
+        allDeliveryOptions.add("Unavailable");
+        ArrayAdapter<String> deliverySpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, allDeliveryOptions) {
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0) {
+                    // Disable the first item from spinner because first item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
+                if(position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
                 return view;
             }
         };
-        deliverySpinnderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spDelivery.setAdapter(deliverySpinnderAdapter);
+        deliverySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDelivery.setAdapter(deliverySpinnerAdapter);
+        spDelivery.setOnItemSelectedListener(listener);
         spDelivery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                deliveryOptionSelected[0] = parent.getItemAtPosition(position).toString();
+                if (position == 0) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+                }
+                deliveryOptionSelected[0] = allDeliveryOptions.get(position);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
+
+
+
+
         // Set onClickListeners
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnUpload.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
                 launchUploader();
             }
         });
         btnTakePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnTakePic.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
                 launchCamera();
             }
         });
         btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnList.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button));
                 // Error checking
                 try {
                     String description = etDescription.getText().toString();
@@ -228,6 +408,7 @@ public class ListFragment extends Fragment {
                     if (!checkForErrors(description, price, units, sellBy, coordinates)) {
                         return;
                     }
+                    Log.i("HERE YE HERE YE", deliveryOptionSelected[0]);
                     // Save listing to database
                     saveListing(description, ParseUser.getCurrentUser(), photoFile, categorySelected[0], coordinates, price, units, new ArrayList<String>(), sellBy, deliveryOptionSelected[0]);
                 } catch (java.text.ParseException e) {
@@ -315,6 +496,8 @@ public class ListFragment extends Fragment {
 
     private void saveListing(String description, ParseUser currentUser, File photoFile, String category, LatLng coordinates, int price, int units, ArrayList<String> colors, Date sellBy, String delivery) {
         // Create new listing
+        Log.i("CATEGORY TYPE", category.getClass().toString());
+        Log.i("CATEGORY ACTUAL", category.toString());
         Listing listing = new Listing();
         listing.setAuthor(ParseUser.getCurrentUser());
         listing.setDescription(description);
@@ -322,7 +505,7 @@ public class ListFragment extends Fragment {
         listing.setLongitude(coordinates.longitude);
         listing.setPrice(price);
         listing.setUnits(units);
-        listing.setCategory(category);
+        listing.put("category", category);
         listing.setColors(colors);
         listing.setSellBy(sellBy);
         if (delivery.equals("Available")) {
@@ -330,6 +513,8 @@ public class ListFragment extends Fragment {
         } else {
             listing.setDelivery(false);
         }
+
+        Log.i("HERE YE", listing.getCategory());
         Bitmap selectedImage = ((BitmapDrawable) ivListingPic.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -353,7 +538,18 @@ public class ListFragment extends Fragment {
                 etPrice.setText("");
                 etUnits.setText("");
                 etSellBy.setText("");
+                spCategories.setSelection(0);
+                spDelivery.setSelection(0);
                 ivListingPic.setImageResource(0);
+                ivRedClicked.setImageResource(0);
+                ivOrangeClicked.setImageResource(0);
+                ivYellowClicked.setImageResource(0);
+                ivGreenClicked.setImageResource(0);
+                ivBlueClicked.setImageResource(0);
+                ivPurpleClicked.setImageResource(0);
+                ivWhiteClicked.setImageResource(0);
+                ivBrownClicked.setImageResource(0);
+                ivBlackClicked.setImageResource(0);
             }
         });
     }

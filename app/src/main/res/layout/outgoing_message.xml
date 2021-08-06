@@ -11,20 +11,23 @@
     <TextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@+id/ivMyProfilePic"
+        android:layout_height="45dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toStartOf="@+id/ivMyProfilePic"
         android:background="@drawable/outgoing_message"
         android:elevation="2dp"
-        android:padding="8dp"
-        android:text="Your outgoing message here"
-        android:textColor="@android:color/black"
-        android:textSize="18dp" />
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:paddingStart="10dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="0dp"
+        android:text="Your outgoing message here" />
 
     <ImageView
         android:id="@+id/ivMyProfilePic"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
         android:contentDescription="My Profile Pic"
         android:src="@mipmap/ic_launcher" />

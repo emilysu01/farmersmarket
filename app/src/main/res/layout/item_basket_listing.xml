@@ -34,9 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvListingTitle"
+        android:layout_centerVertical="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/ivListingImage"
+        android:layout_toEndOf="@+id/tvName"
         android:text="TextView"
         tools:text="@emilysu01" />
 
@@ -45,9 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvListingTitle"
+        android:layout_centerVertical="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/tvUsername"
+        android:layout_toEndOf="@+id/ivListingImage"
         android:text="TextView"
         android:textStyle="bold"
         tools:text="Emily Su" />

@@ -105,12 +105,14 @@ public class AllMessagesAdapter extends RecyclerView.Adapter<AllMessagesAdapter.
                         if (conversation.getPerson1().equals(ParseUser.getCurrentUser())) {
                             Glide.with(context)
                                     .load(conversation.getPerson1().fetchIfNeeded().getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                                    .circleCrop()
                                     .into(ivProfilePic);
                             tvName.setText(conversation.getPerson1().fetchIfNeeded().getString(User.KEY_NAME));
                         } else {
                             Log.i("PROF PIC", conversation.getPerson1().getObjectId());
                             Glide.with(context)
                                     .load(conversation.getPerson2().fetchIfNeeded().getParseFile(User.KEY_PROFILE_PIC).getUrl())
+                                    .circleCrop()
                                     .into(ivProfilePic);
                             tvName.setText(conversation.getPerson2().fetchIfNeeded().getString(User.KEY_NAME));
                         }

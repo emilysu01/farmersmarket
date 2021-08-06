@@ -8,28 +8,30 @@
 
     <EditText
         android:id="@+id/etSearchBar"
-        android:layout_width="309dp"
+        android:layout_width="325dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/rounded_corner"
         android:ems="10"
         android:hint="Search"
-        android:inputType="textShortMessage" />
+        android:inputType="textShortMessage"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
 
     <ImageButton
         android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
-        android:layout_toEndOf="@+id/etSearchBar"
-        android:background="@color/light_green"
+        android:background="@drawable/search_button_background"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_search" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -52,7 +54,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/rounded_corner"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
 
     <Spinner
         android:id="@+id/spFilter"
@@ -63,7 +68,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/rounded_corner"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
 
     <TextView
         android:id="@+id/tvSort"

@@ -14,7 +14,7 @@
         android:layout_below="@+id/ivLogo"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/rounded_corner"
         android:ems="10"
@@ -63,13 +63,15 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="60dp"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="79dp"
+        android:layout_marginTop="50dp"
+        android:scaleType="fitXY"
         tools:srcCompat="@tools:sample/avatars" />
 
 </RelativeLayout>

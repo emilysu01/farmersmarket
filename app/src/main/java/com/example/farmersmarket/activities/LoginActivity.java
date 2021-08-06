@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.farmersmarket.LocationUtils;
 import com.example.farmersmarket.R;
 import com.parse.LogInCallback;
@@ -59,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Display UI
         Glide.with(this)
-                .load(getResources().getDrawable(R.drawable.ic_basket))
+                .load(getResources().getDrawable(R.mipmap.ic_basket))
+                .apply(new RequestOptions().override(1000, 1000))
                 .into(ivLogo);
 
         // Set onClickListener for sign up link

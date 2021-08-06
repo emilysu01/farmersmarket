@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -65,7 +68,22 @@ public class SearchFragment extends Fragment {
         rvSearchResults.setAdapter(adapter);
         rvSearchResults.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
+        final Animation buttonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button);
+
         // Configure sort and filter spinners
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
         final String[] sortOptionSelected = new String[1];
         ArrayList<String> sortOptions = new ArrayList<String>();
         sortOptions.add("Sort Options");
@@ -97,6 +115,8 @@ public class SearchFragment extends Fragment {
         };
         sortedSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spSort.setAdapter(sortedSpinnerAdapter);
+        spSort.setOnItemSelectedListener(listener);
+
         final String[] filterOptionsSelected = new String[1];
         ArrayList<String> filterOptions = new ArrayList<String>();
         filterOptions.add("Filter Options");
@@ -129,11 +149,14 @@ public class SearchFragment extends Fragment {
         };
         filterSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFilter.setAdapter(filterSpinnerAdapter);
+        spFilter.setOnItemSelectedListener(listener);
 
         // Set onClickListener for search button
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSearch.startAnimation(buttonAnimation);
+
                 // Error checking
                 String searchStr = etSearchBar.getText().toString();
                 if (searchStr.isEmpty()) {

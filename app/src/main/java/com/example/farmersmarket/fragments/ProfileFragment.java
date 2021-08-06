@@ -86,8 +86,8 @@ public class ProfileFragment extends Fragment {
                     .circleCrop()
                     .into(ivProfilePic);
         }
-        tvName.setText(user.getString(User.KEY_PROFILE_PIC));
-        tvUsername.setText(user.getUsername());
+        tvName.setText(user.getString(User.KEY_NAME));
+        tvUsername.setText("@" + user.getUsername());
 
         // Retrieve listings from database
         queryListings(user);

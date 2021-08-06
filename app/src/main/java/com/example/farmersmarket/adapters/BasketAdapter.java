@@ -19,12 +19,18 @@ import com.example.farmersmarket.R;
 import com.example.farmersmarket.fragments.DetailedListingFragment;
 import com.example.farmersmarket.models.Listing;
 import com.example.farmersmarket.models.User;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
 
+    public static final String TAG = "BasketAdapter";
     private Context context;
     private List<Listing> basketListings;
 
@@ -36,6 +42,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
     }
 
+    public Context getContext() {
+        return this.context;
+    }
     @NonNull
     @Override
     public BasketAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,6 +63,38 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return basketListings.size();
+    }
+
+    public void deleteItem(int position) {
+    }
+
+    public void deleteTask(int position) {
+        Listing listingToDelete = basketListings.get(position);
+        basketListings.remove(position);
+        notifyItemRemoved(position);
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.include(User.KEY_BASKET);
+        query.whereEqualTo(User.KEY_OBJECT_ID, ParseUser.getCurrentUser().getObjectId());
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+
+                parseUser.put(User.KEY_BASKET, basketListings);
+                parseUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Issue with saving posts", e);
+                            return;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,8 +123,9 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
                 Glide.with(context)
                         .load(listing.getImages().get(0).getUrl())
                         .into(ivListingImage);
-                tvListingTitle.setText(listing.getDescription());
-                tvUsername.setText(listing.getParseUser(Listing.KEY_AUTHOR).fetchIfNeeded().getString(User.KEY_USERNAME));
+                String category = listing.getCategory();
+                tvListingTitle.setText(category.substring(0,1).toUpperCase() + category.substring(1).toLowerCase());
+                tvUsername.setText("@" + listing.getParseUser(Listing.KEY_AUTHOR).fetchIfNeeded().getString(User.KEY_USERNAME));
                 tvName.setText(listing.getParseUser(Listing.KEY_AUTHOR).fetchIfNeeded().getString(User.KEY_NAME));
                 tvDescription.setText(listing.getDescription());
             } catch (ParseException e) {
@@ -93,6 +135,26 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
             // Set onClickListener
             ivListingImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = basketListings.get(position);
+                        goToDetailedListingScreen(listing);
+                    }
+                }
+            });
+            tvDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Listing listing = basketListings.get(position);
+                        goToDetailedListingScreen(listing);
+                    }
+                }
+            });
+            tvListingTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();

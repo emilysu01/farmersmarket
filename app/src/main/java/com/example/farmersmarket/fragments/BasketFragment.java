@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.farmersmarket.R;
+import com.example.farmersmarket.SwipeToDeleteCallback;
 import com.example.farmersmarket.adapters.BasketAdapter;
 import com.example.farmersmarket.adapters.ShortListingsAdapter;
 import com.example.farmersmarket.models.Listing;
@@ -61,6 +63,9 @@ public class BasketFragment extends Fragment {
         adapter = new BasketAdapter(getContext(), basketListings);
         rvBasket.setAdapter(adapter);
         rvBasket.setLayoutManager(new LinearLayoutManager(getContext()));
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(rvBasket);
 
         // Retrieve basket listings
         retrieveBasket();

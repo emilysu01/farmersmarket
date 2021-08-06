@@ -165,18 +165,36 @@ public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapte
     private void addToBasket(Listing listing) {
         // Retrieve old basket, add listing to old basket, and update basket in database
         ParseUser currentUser = ParseUser.getCurrentUser();
-        List<Listing> currentBasket = currentUser.getList(User.KEY_BASKET);
-        currentBasket.add(0, listing);
-        currentUser.put(User.KEY_BASKET, currentBasket);
-        currentUser.saveInBackground(new SaveCallback() {
+        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+        query.whereEqualTo(User.KEY_OBJECT_ID, currentUser.getObjectId());
+        query.include(User.KEY_BASKET);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
+            public void done(ParseUser parseUser, ParseException e) {
                 if (e != null) {
-                    Toast.makeText(context, "There was an issue adding to basket. Please try again.", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Issue with adding to basket", e);
+                    Log.e(TAG, "Issue with retrieving basket", e);
                     return;
                 }
-                Toast.makeText(context, "Listing added to basket successfully!", Toast.LENGTH_SHORT).show();
+                List<Listing> currentBasket = parseUser.getList(User.KEY_BASKET);
+                for (Listing basketListing : currentBasket) {
+                    if (basketListing.getObjectId().equals(listing.getObjectId())) {
+                        Toast.makeText(context, "This listing is already in your basket!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                currentBasket.add(0, listing);
+                currentUser.put(User.KEY_BASKET, currentBasket);
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Toast.makeText(context, "There was an issue adding to basket. Please try again.", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Issue with adding to basket", e);
+                            return;
+                        }
+                        Toast.makeText(context, "Listing added to basket successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

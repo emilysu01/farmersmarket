@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -87,10 +89,14 @@ public class SingleMessageFragment extends Fragment {
         etMessaage = view.findViewById(R.id.etMessage);
         imgBtnSend = view.findViewById(R.id.imgBtnSend);
 
+        final Animation buttonAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.bounce_button);
+
         // Set onClickListener for send button
         imgBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imgBtnSend.startAnimation(buttonAnimation);
+
                 // Retrieve typed text
                 String typedText = etMessaage.getText().toString();
 
@@ -117,13 +123,10 @@ public class SingleMessageFragment extends Fragment {
         // Create new message
         Message parseMessage = new Message();
         parseMessage.put(Message.KEY_SENDER, ParseUser.getCurrentUser());
-        Log.i("THIS", ParseUser.getCurrentUser().getObjectId());
         if (thisConvo.getPerson1().equals(ParseUser.getCurrentUser())) {
-            parseMessage.put(Message.KEY_RECIPIENT, thisConvo.getPerson1());
-            Log.i("OTHER", thisConvo.getPerson2().getObjectId());
+            parseMessage.put(Message.KEY_RECIPIENT, thisConvo.getPerson2());
         } else {
             parseMessage.put(Message.KEY_RECIPIENT, thisConvo.getPerson2());
-            Log.i("OTHER", thisConvo.getPerson1().getObjectId());
         }
         parseMessage.put(Message.KEY_MESSAGE, message);
 
@@ -171,6 +174,7 @@ public class SingleMessageFragment extends Fragment {
         queries.add(user2ToUser1);
 
         ParseQuery<Message> finalQuery = ParseQuery.or(queries);
+        // ParseQuery<Message> finalQuery = user1ToUser2;
         finalQuery.include(Message.KEY_SENDER);
         finalQuery.include(Message.KEY_RECIPIENT);
         finalQuery.setLimit(MAX_MESSAGES_TO_SHOW);
@@ -183,15 +187,12 @@ public class SingleMessageFragment extends Fragment {
                     Log.e(TAG, "Issue with retrieving messages", e);
                     return;
                 }
-                Log.i("USER", messages.get(0).getParseUser(Message.KEY_SENDER).getUsername());
+                Log.i("USER", messages.toString());
 
                 allMessages.clear();
                 allMessages.addAll(messages);
                 adapter.notifyDataSetChanged();
-                if (firstLoad) {
-                    rvMessages.scrollToPosition(0);
-                    firstLoad = false;
-                }
+                rvMessages.scrollToPosition(allMessages.size() - 1);
             }
         });
     }
